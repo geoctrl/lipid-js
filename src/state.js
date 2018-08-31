@@ -1,9 +1,5 @@
 import { Subject } from 'rxjs';
 
-function objectError() {
-  throw Error(`[State] state must be an object`)
-}
-
 /**
  * State has 1 rule:
  * state must be an object
@@ -26,7 +22,7 @@ class State {
       };
       this.subject.next(this.state);
     } else {
-      objectError();
+      throw Error(`[State] state must be an object`)
     }
     return this.state;
   }
