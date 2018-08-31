@@ -1,5 +1,9 @@
 import { Subject } from 'rxjs';
 
+function objectError() {
+  throw Error(`[State] state must be an object`)
+}
+
 /**
  * State has 1 rule:
  * state must be an object
@@ -9,12 +13,21 @@ class State {
     this.state = defaultState || {};
     this.subject = new Subject();
   }
+
   set(newState) {
-    this.state = {
-      ...this.state,
-      ...newState,
-    };
-    this.subject.next(this.state);
+    const state = typeof newState === 'function'
+      ? newState(this.state)
+      : newState;
+
+    if (typeof state === 'object' && !Array.isArray(state)) {
+      this.state = {
+        ...this.state,
+        ...state,
+      };
+      this.subject.next(this.state);
+    } else {
+      objectError();
+    }
     return this.state;
   }
   get(name) {

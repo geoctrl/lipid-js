@@ -1,18 +1,18 @@
 import React, { Component } from 'react';
-import { view } from './view.state';
+import ViewState from './view.state';
 
 class App extends Component {
   constructor() {
     super();
-    view.subscribe((state) => this.setState({ number: state.number }));
+    ViewState.subscribe((state) => this.setState({ number: state.number }));
   }
 
   state = {
-    number: view.get('number'),
+    number: ViewState.get('number'),
   }
 
   set() {
-    view.set({ number: 10 });
+    ViewState.set(() => ({ number: 10 }));
   }
 
   render() {

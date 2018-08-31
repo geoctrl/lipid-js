@@ -6,5 +6,4 @@ class View extends State {
   }
 }
 
-const view = new View();
-export { view };
+export default new View();
