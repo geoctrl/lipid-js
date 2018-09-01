@@ -13,14 +13,14 @@ class Other extends Component {
         number,
         isTen: ViewState.isTen()
       });
-    });
+    }, ['*']);
   }
 
   render() {
     return (
       <div>
         number: {this.state.number}
-        <div>is 10: {this.state.isTen ? 'true' : 'false'}</div>
+        <div>is 10: {ViewState.isTen() ? 'true' : 'false'}</div>
       </div>
     );
   }

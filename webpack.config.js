@@ -4,9 +4,9 @@ const config = {};
 
 config.mode = 'development';
 
-config.entry = resolve(__dirname, 'src/index.js');
+config.entry = resolve(__dirname, 'dev/index.js');
 config.output = {
-  path: resolve(__dirname, 'src'),
+  path: resolve(__dirname, 'dev'),
   filename: 'bundle.js',
 };
 
@@ -18,10 +18,11 @@ config.module = {
       use: {
         loader: 'babel-loader',
         options: {
-          presets: ['@babel/preset-react'],
+          presets: ['@babel/preset-env', '@babel/preset-react'],
           plugins: [
-            '@babel/plugin-proposal-object-rest-spread',
-            '@babel/plugin-proposal-class-properties',
+            ['@babel/plugin-syntax-decorators', {
+              legacy: true,
+            }]
           ],
         }
       }

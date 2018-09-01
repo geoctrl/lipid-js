@@ -1,24 +1,25 @@
 {
-  "name": "stupid-state",
-  "version": "1.0.0",
-  "main": "index.js",
+  "name": "simple-state",
+  "version": "0.0.1",
+  "main": "src/index.js",
+  "author": "@geoctrl",
   "license": "MIT",
   "scripts": {
-    "start": "webpack-serve --config ./webpack.config.js --content ./src --port 8080"
+    "start": "webpack-serve --config ./webpack.config.js --content ./dev --port 8080"
   },
   "devDependencies": {
-    "@babel/plugin-proposal-class-properties": "^7.0.0-rc.1",
-    "@babel/plugin-proposal-object-rest-spread": "^7.0.0-rc.1",
-    "babel-loader": "^8.0.0-beta",
+    "@babel/core": "^7.0.0",
+    "@babel/plugin-syntax-decorators": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
+    "@babel/preset-react": "^7.0.0",
+    "babel-loader": "^8.0.0",
+    "react": "^16.4.2",
+    "react-dom": "^16.4.2",
     "webpack": "^4.16.5",
     "webpack-cli": "^3.1.0",
     "webpack-serve": "^2.0.2"
   },
   "dependencies": {
-    "@babel/core": "^7.0.0-rc.1",
-    "@babel/preset-react": "^7.0.0-rc.1",
-    "react": "^16.4.2",
-    "react-dom": "^16.4.2",
     "rxjs": "^6.2.2"
   }
 }
