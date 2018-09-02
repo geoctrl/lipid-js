@@ -1,5 +1,5 @@
 # Simple State Changelog
 
-### v0.0.1
+### v0.0.2
 
 - Validation of idea

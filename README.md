@@ -6,12 +6,12 @@ Simple state management.
 
 ```shell
 # NPM
-$ npm install -S simple-state
+$ npm install -S @geoctrl/simple-state
 ```
 
 ```shell
 # yarn
-$ yarn add simple-state
+$ yarn add @geoctrl/simple-state
 ```
 
 ## Setting up your state

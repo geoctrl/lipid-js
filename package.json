@@ -1,6 +1,6 @@
 {
-  "name": "simple-state",
-  "version": "0.0.1",
+  "name": "@geoctrl/simple-state",
+  "version": "0.0.2",
   "main": "src/index.js",
   "author": "@geoctrl",
   "license": "MIT",
