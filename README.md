@@ -21,7 +21,7 @@ $ yarn add @geoctrl/simple-state
 To use `simple-state`, just instantiate the `SimpleState` class:
 
 ```javascript
-import { SimpleState } from 'simple-state';
+import { SimpleState } from '@geoctrl/simple-state';
   
 const userState = new SimpleState();
 console.log(userState.get()); // {}
@@ -35,7 +35,7 @@ to use the state.
 You can add a default state by passing in an object as the first argument:
 
 ```javascript
-import { SimpleState } from 'simple-state';
+import { SimpleState } from '@geoctrl/simple-state';
 
 const userState = new SimpleState({
   firstName: 'John',
@@ -52,7 +52,7 @@ If you need to add complicated logic or ajax calls when you change state, we can
 with any sort of methods that we want:
 
 ```javascript
-import { SimpleState } from 'simple-state';
+import { SimpleState } from '@geoctrl/simple-state';
 
 class UserState extends SimpleState {
   isAdult() {
@@ -91,7 +91,7 @@ instantiated instance:
 **inside your extending class:**
 
 ```javascript
-import { SimpleState } from 'simple-state';
+import { SimpleState } from '@geoctrl/simple-state';
 
 class UserState extends SimpleState {
   updateName(name) {
@@ -146,7 +146,7 @@ userState.subscribe((state) => console.log(state), ['firstName']);
 **user-state.js**
 
 ```javascript
-import SimpleState from 'simple-state';
+import SimpleState from '@geoctrl/simple-state';
 
 class UserState extends SimpleState {
   isAdult() {
