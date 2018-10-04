@@ -1,6 +1,6 @@
 # Simple State
 
-Simple state management that scales with your application. Less than 1kb gzipped.
+Simple state management that scales with your application. No dependencies. Less than 1kb gzipped.
 
 ## Install
 
