@@ -1,13 +1,13 @@
-const { EventEmitter } = require('./event-emitter');
+const EventEmitter = require('./event-emitter');
 
 /**
  * Simple State
  * @param {object} defaultState
  */
-class SimpleState {
+module.exports = class SimpleState {
   constructor(defaultState) {
     this.state = defaultState || {};
-    this.subject = new EventEmitter();
+    this.emitter = new EventEmitter();
   }
   set(newState) {
     const state = typeof newState === 'function'
@@ -16,29 +16,16 @@ class SimpleState {
     if (typeof state === 'object' && !Array.isArray(state)) {
       const prevState = Object.assign({}, this.state);
       this.state = Object.assign({}, this.state, JSON.parse(JSON.stringify(state)));
-      this.subject.next(this.state, prevState);
+      this.emitter.next(prevState, this.state);
     } else {
       throw Error(`[State] state must be an object`)
     }
     return this.state;
   }
-  get(name) {
-    if (name) {
-      return this.state[name];
-    }
+  get() {
     return this.state;
   }
-  subscribe(next, props) {
-    let saveProps;
-    if (typeof props === 'string') {
-      saveProps = [props];
-    } else if (!Array.isArray(props)) {
-      saveProps = ['*'];
-    } else {
-      saveProps = props;
-    }
-    return this.subject.subscribe(saveProps, next);
+   subscribe(next, ...props) {
+    return this.emitter.subscribe(next, props);
   }
 }
-
-module.exports = { SimpleState };

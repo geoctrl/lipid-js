@@ -8,14 +8,16 @@ class App extends Component {
       this.setState({ number, age });
     });
 
+    const { number, age } = ViewState.get();
+
     this.state = {
-      number: ViewState.get('number'),
-      age: ViewState.get('age'),
+      number,
+      age,
     }
   }
 
   set() {
-    ViewState.set(() => ({ number: ViewState.get('number') + 5 }));
+    ViewState.set(() => ({ number: this.state.number + 5 }));
   }
 
   render() {

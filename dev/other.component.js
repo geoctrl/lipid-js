@@ -4,16 +4,17 @@ import ViewState from './view.state';
 class Other extends Component {
   constructor() {
     super();
+    const { number } = ViewState.get();
     this.state = {
       isTen: ViewState.isTen(),
-      number: ViewState.get('number'),
+      number,
     };
     ViewState.subscribe(({ number }) => {
       this.setState({
         number,
         isTen: ViewState.isTen()
       });
-    }, ['*']);
+    }, 'number');
   }
 
   render() {

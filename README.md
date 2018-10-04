@@ -1,6 +1,6 @@
 # Simple State
 
-Simple state management.
+Simple state management that scales with your application. No dependencies. Less than 1kb gzipped.
 
 ## Install
 
@@ -18,10 +18,10 @@ $ yarn add @geoctrl/simple-state
 
 #### Simple Example
 
-To use `simple-state`, just instantiate the `SimpleState` class:
+To use simple-state, just instantiate the `SimpleState` class:
 
 ```javascript
-import { SimpleState } from '@geoctrl/simple-state';
+import SimpleState from '@geoctrl/simple-state';
   
 const userState = new SimpleState();
 console.log(userState.get()); // {}
@@ -35,7 +35,7 @@ to use the state.
 You can add a default state by passing in an object as the first argument:
 
 ```javascript
-import { SimpleState } from '@geoctrl/simple-state';
+import SimpleState from '@geoctrl/simple-state';
 
 const userState = new SimpleState({
   firstName: 'John',
@@ -43,7 +43,7 @@ const userState = new SimpleState({
   age: 5,
 });
 
-console.log(userState.get('firstName')); // 'John'
+console.log(userState.get().name); // 'John'
 ```
 
 #### Extend State
@@ -52,7 +52,7 @@ If you need to add complicated logic or ajax calls when you change state, we can
 with any sort of methods that we want:
 
 ```javascript
-import { SimpleState } from '@geoctrl/simple-state';
+import SimpleState from '@geoctrl/simple-state';
 
 class UserState extends SimpleState {
   isAdult() {
@@ -71,18 +71,6 @@ console.log(userState.isAdult()); // false
 
 Using the example above, we can now use our `userState` in our app.
 
-#### .get([key])
-
-The easiest way to get your entire state is to use the `.get()` method without any parameters. To get just one
-property on state, just pass in the prop key:
-
-```javascript
-import userState from './user-state';
-
-userState.get(); // entire state object
-userState.get('age'); // just the state.age property
-```
-
 #### .set(state)
 
 To set data on your state, you need to use the `.set()` method. This can be done within your extending class, or your
@@ -91,7 +79,7 @@ instantiated instance:
 **inside your extending class:**
 
 ```javascript
-import { SimpleState } from '@geoctrl/simple-state';
+import SimpleState from '@geoctrl/simple-state';
 
 class UserState extends SimpleState {
   updateName(name) {
@@ -118,9 +106,20 @@ userState.set({
 });
 ```
 
-#### .subscribe(next [, props])
+#### .get()
 
-Subscribe allows us to get incremental changes over time. Much like how RxJS works, we subscribe to the state and pass
+The easiest way to get your entire state is to use the `.get()` method.
+
+```javascript
+import userState from './user-state';
+
+userState.get(); // entire state object
+userState.get('age'); // just the state.age property
+```
+
+#### .subscribe(next [, ...props])
+
+Subscribe allows us to get incremental changes over time. Much like how observables, we subscribe to the state and pass
 in a callback to be called on every change:
 
 ```javascript
@@ -130,15 +129,15 @@ import userState from './user-state';
 userState.subscribe((state) => console.log(state));
 ```
 
-If your state is big, there's a good chance that not EVERY observer will want EVERY change. To make sure we're being
-smart with our updates, we can pass in an array of key names to tell our state what props to watch for and let us
+If your state is big, there's a good chance that not every observer will want all changes. To make sure we're being
+smart with our updates, we can pass in key names to tell our state what props to watch for and let us
 know if any changes have occurred:
 
 ```javascript
 import userState from './user-state';
 
-userState.subscribe((state) => console.log(state), ['firstName']);
-// only changes to 'firstName' will fire an event here
+userState.subscribe((state) => console.log(state), 'firstName', 'lastName');
+// only changes to 'firstName' and 'lastName' will fire an event here
 ```
 
 ## Practical React Example
@@ -168,10 +167,10 @@ export default class DisplayAge extends Component {
     super();
     userState.subscribe(({ age }) => {
       this.setState({ age, isAdult: userState.isAdult() });
-    }, ['age']); // this component only cares about the 'age' property
+    }, 'age'); // this component only cares about the 'age' property
   }
   state = {
-    age: userState.get('age'),
+    age: userState.get().age,
     isAdult: userState.isAdult(),
   }
   
