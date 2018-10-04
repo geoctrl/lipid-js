@@ -1,4 +1,4 @@
-import { SimpleState } from '../src';
+import SimpleState from '../index';
 
 class ViewState extends SimpleState {
   isTen() {

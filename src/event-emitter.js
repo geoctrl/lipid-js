@@ -1,15 +1,14 @@
-class EventEmitter {
+module.exports = class EventEmitter {
   constructor() {
     this.observers = [];
     this.index = 0;
   }
 
-  next(state, prevState) {
+  next(prevState, state) {
     this.observers.forEach(observer => {
-      if (observer.props.reduce((final, prop) => {
-        if (prop === '*') {
-          return [...final, prop];
-        }
+      if (!observer.props.length) {
+        observer.next(state);
+      } else if (observer.props && observer.props.reduce((final, prop) => {
         if (state[prop] !== prevState[prop]) {
           return [...final, prop]
         }
@@ -19,7 +18,7 @@ class EventEmitter {
       }
     });
   }
-  subscribe(props, next = () => {}) {
+  subscribe(next = () => {}, props = []) {
     this.index = this.index + 1;
     this.observers.push({ props, next, key: this.index });
     return { unsubscribe: () => this._unsubscribe(this.index) };
@@ -31,5 +30,3 @@ class EventEmitter {
     }
   }
 }
-
-module.exports = { EventEmitter };

@@ -1,25 +1,29 @@
 {
   "name": "@geoctrl/simple-state",
-  "version": "0.0.3",
-  "main": "src/index.js",
+  "version": "0.1.0",
+  "main": "index.js",
   "author": "@geoctrl",
   "license": "MIT",
   "scripts": {
-    "start": "webpack-serve --config ./webpack.config.js --content ./dev --port 8080"
+    "start": "webpack-serve --config ./webpack.config.js --content ./dev --port 8080",
+    "test": "jest ./src",
+    "watch-tests": "jest ./src --watch"
   },
   "devDependencies": {
-    "@babel/core": "^7.0.0",
+    "@babel/core": "^7.1.2",
     "@babel/plugin-syntax-decorators": "^7.0.0",
-    "@babel/preset-env": "^7.0.0",
+    "@babel/preset-env": "^7.1.0",
     "@babel/preset-react": "^7.0.0",
+    "babel-core": "^7.0.0-bridge",
+    "babel-jest": "^23.6.0",
     "babel-loader": "^8.0.0",
+    "jest": "^23.6.0",
+    "jest-cli": "^23.6.0",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
     "webpack": "^4.16.5",
     "webpack-cli": "^3.1.0",
     "webpack-serve": "^2.0.2"
   },
-  "dependencies": {
-    "rxjs": "^6.2.2"
-  }
+  "dependencies": {}
 }
