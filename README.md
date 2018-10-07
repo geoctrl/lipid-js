@@ -108,13 +108,14 @@ userState.set({
 
 #### .get()
 
-The easiest way to get your entire state is to use the `.get()` method.
+Get the entire state object with the `.get()` method.
 
 ```javascript
 import userState from './user-state';
 
-userState.get(); // entire state object
-userState.get('age'); // just the state.age property
+const state = userState.get();
+const age = userState.get().age;
+const { name } = userState.get();
 ```
 
 #### .subscribe(next [, ...props])

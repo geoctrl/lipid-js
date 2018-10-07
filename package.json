@@ -1,9 +1,10 @@
 {
   "name": "@geoctrl/simple-state",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "main": "index.js",
   "author": "@geoctrl",
   "license": "MIT",
+  "repository": "geoctrl/simple-state",
   "scripts": {
     "start": "webpack-serve --config ./webpack.config.js --content ./dev --port 8080",
     "test": "jest ./src",
