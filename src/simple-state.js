@@ -15,7 +15,7 @@ module.exports = class SimpleState {
       : newState;
     if (typeof state === 'object' && !Array.isArray(state)) {
       const prevState = Object.assign({}, this.state);
-      this.state = Object.assign({}, this.state, JSON.parse(JSON.stringify(state)));
+      this.state = Object.assign({}, this.state, state);
       this.emitter.next(prevState, this.state);
     } else {
       throw Error(`[State] state must be an object`)
