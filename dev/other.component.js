@@ -9,12 +9,16 @@ class Other extends Component {
       isTen: ViewState.isTen(),
       number,
     };
-    ViewState.subscribe(({ number }) => {
+    this.test = ViewState.subscribe(({ number }) => {
       this.setState({
         number,
         isTen: ViewState.isTen()
       });
     }, 'number');
+  }
+
+  componentWillUnmount() {
+    this.test.unsubscribe();
   }
 
   render() {

@@ -1,7 +1,14 @@
+class Observer {
+  constructor(props, next, unsubscribe) {
+    this.props = props;
+    this.next = next;
+    this.unsubscribe = unsubscribe;
+  }
+}
+
 module.exports = class EventEmitter {
   constructor() {
     this.observers = [];
-    this.index = 0;
   }
 
   next(prevState, state) {
@@ -19,12 +26,12 @@ module.exports = class EventEmitter {
     });
   }
   subscribe(next = () => {}, props = []) {
-    this.index = this.index + 1;
-    this.observers.push({ props, next, key: this.index });
-    return { unsubscribe: () => this._unsubscribe(this.index) };
+    const obs = new Observer(props, next, this._unsubscribe);
+    this.observers.push(obs);
+    return { unsubscribe: () => this._unsubscribe(obs) };
   }
-  _unsubscribe(key) {
-    const index = this.observers.findIndex(observer => observer.key === key);
+  _unsubscribe(thisObserver) {
+    const index = this.observers.findIndex(observer => observer === thisObserver);
     if (index > -1) {
       this.observers = this.observers.slice(0, index).concat(this.observers.slice(index + 1));
     }
