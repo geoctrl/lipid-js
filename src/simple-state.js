@@ -1,10 +1,10 @@
-const EventEmitter = require('./event-emitter');
+import EventEmitter from './event-emitter';
 
 /**
  * Simple State
  * @param {object} defaultState
  */
-module.exports = class SimpleState {
+export default class SimpleState {
   constructor(defaultState) {
     this.state = defaultState || {};
     this.emitter = new EventEmitter();
