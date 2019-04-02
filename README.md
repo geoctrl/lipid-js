@@ -160,33 +160,26 @@ export default new UserState();
 **app.js**
 
 ```javascript
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import userState from './user-state';
 
-export default class DisplayAge extends Component {
-  constructor() {
-    super();
-    userState.subscribe(({ age }) => {
-      this.setState({ age, isAdult: userState.isAdult() });
-    }, 'age'); // this component only cares about the 'age' property
-  }
-  state = {
-    age: userState.get().age,
-    isAdult: userState.isAdult(),
-  }
+export DisplayAge() {
+  const [age, updateAge] = useState(userState.state.age);
+  const [isAdult, updateIsAdult] = useState(userState.isAdult());
   
-  updateName = () => {
-    userState.set({ age: 18 });
-  }
-
-  render() {
-    return (
-      <div>
-        <div>Age: {this.state.age}</div>
-        <div>Is adult: {this.state.isAdult ? 'true' : 'false'}</div>
-      </div>
-    );
-  }
+  useEffect(() => {
+    const ageObservable = userState.subscribe(({ age }) => {
+      updateAge(age);
+      updateIsAdult(userState.isAdult());
+    }, 'age');
+    return ageObservable.unsubscribe;
+  }, []);  
+  
+  return (
+    <div>
+      <div>Age: {this.state.age}</div>
+      <div>Is adult: {this.state.isAdult.toString()}</div>
+    </div>
+  );
 }
 ```
-
