@@ -177,8 +177,8 @@ export DisplayAge() {
   
   return (
     <div>
-      <div>Age: {this.state.age}</div>
-      <div>Is adult: {this.state.isAdult.toString()}</div>
+      <div>Age: {age}</div>
+      <div>Is adult: {isAdult.toString()}</div>
     </div>
   );
 }
