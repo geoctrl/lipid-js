@@ -163,7 +163,7 @@ export default new UserState();
 import React, { useState, useEffect } from 'react';
 import userState from './user-state';
 
-export DisplayAge() {
+export function DisplayAge() {
   const [age, updateAge] = useState(userState.state.age);
   const [isAdult, updateIsAdult] = useState(userState.isAdult());
   
