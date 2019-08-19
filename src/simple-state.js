@@ -19,14 +19,14 @@ export default class SimpleState {
       this.state = Object.assign({}, this.state, state);
       this.emitter.next(prevState, this.state);
     } else {
-      throw Error(`[State] state must be an object`)
+      this.emitter.error(new TypeError(`set(state) "state" must be an object`));
     }
     return this.state;
   }
   get() {
     return this.state;
   }
-   subscribe(next, ...props) {
-    return this.emitter.subscribe(next, props);
+  subscribe(next, props, error) {
+    return this.emitter.subscribe(next, props, error);
   }
 }

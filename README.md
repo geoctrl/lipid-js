@@ -120,7 +120,7 @@ const { name } = userState.get();
 
 #### .subscribe(next [, ...props])
 
-Subscribe allows us to get incremental changes over time. Much like how observables, we subscribe to the state and pass
+Subscribe allows us to get incremental changes over time. Much like how observables work, we subscribe to the state and pass
 in a callback to be called on every change:
 
 ```javascript
@@ -168,11 +168,11 @@ export function DisplayAge() {
   const [isAdult, updateIsAdult] = useState(userState.isAdult());
   
   useEffect(() => {
-    const ageObservable = userState.subscribe(({ age }) => {
+    const ageObserver = userState.subscribe(({ age }) => {
       updateAge(age);
       updateIsAdult(userState.isAdult());
     }, 'age');
-    return ageObservable.unsubscribe;
+    return ageObserver.unsubscribe;
   }, []);  
   
   return (
