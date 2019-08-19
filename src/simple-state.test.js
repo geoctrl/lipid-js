@@ -63,9 +63,17 @@ describe(`SimpleState`, () => {
     expect(subscriber.mock.calls.length).toEqual(2);
   });
 
-  test(`Should throw if state is not an object`, () => {
+  test(`Should call error handler if not an object`, () => {
     const state = new SimpleState();
-    expect(() => state.set('not an object')).toThrowError();
+    const onError = jest.fn();
+    state.subscribe(() => {}, [], onError);
+    state.set('not an object');
+    expect(onError).toBeCalled();
+  });
+
+  test(`Should throw if next is not a function`, () => {
+    const state = new SimpleState();
+    expect(() => state.subscribe(null)).toThrowError();
   });
 
 });

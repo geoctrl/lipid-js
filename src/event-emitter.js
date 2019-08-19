@@ -1,9 +1,10 @@
 import { isEqual } from './utils';
 
 class Observer {
-  constructor(props, next, unsubscribe) {
+  constructor(props, next, error, unsubscribe) {
     this.props = props;
     this.next = next;
+    this.error = error;
     this.unsubscribe = unsubscribe;
   }
 }
@@ -30,8 +31,18 @@ export default class EventEmitter {
       }
     });
   }
-  subscribe(next = () => {}, props = []) {
-    const obs = new Observer(props, next, this._unsubscribe);
+
+  error(error) {
+    this.observers.forEach(observer => {
+      observer.error(error);
+    });
+  }
+
+  subscribe(next, props = [], onError) {
+    if (typeof next !== 'function') {
+      throw TypeError(`"next" should be a function`);
+    }
+    const obs = new Observer(props, next, onError, this._unsubscribe);
     this.observers.push(obs);
     return { unsubscribe: () => this._unsubscribe(obs) };
   }
