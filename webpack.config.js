@@ -1,12 +1,12 @@
-const { resolve } = require('path');
+const path = require('path');
 
 const config = {};
 
 config.mode = 'development';
 
-config.entry = resolve(__dirname, 'dev/index.js');
+config.entry = path.resolve(__dirname, 'dev/index.js');
 config.output = {
-  path: resolve(__dirname, 'dev'),
+  path: path.resolve(__dirname, 'dev'),
   filename: 'bundle.js',
 };
 
@@ -29,5 +29,12 @@ config.module = {
     }
   ],
 }
+
+config.devServer = {
+  index: 'index.html',
+  contentBase: path.resolve(__dirname, 'dev'),
+  historyApiFallback: true,
+  port: 8080,
+};
 
 module.exports = config;

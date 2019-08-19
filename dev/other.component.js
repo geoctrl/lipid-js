@@ -14,7 +14,7 @@ class Other extends Component {
         number,
         isTen: ViewState.isTen()
       });
-    }, 'number');
+    }, ['number']);
   }
 
   componentWillUnmount() {

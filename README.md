@@ -118,7 +118,7 @@ const age = userState.get().age;
 const { name } = userState.get();
 ```
 
-#### .subscribe(next [, ...props])
+#### .subscribe(next, props, error)
 
 Subscribe allows us to get incremental changes over time. Much like how observables work, we subscribe to the state and pass
 in a callback to be called on every change:
@@ -131,14 +131,25 @@ userState.subscribe((state) => console.log(state));
 ```
 
 If your state is big, there's a good chance that not every observer will want all changes. To make sure we're being
-smart with our updates, we can pass in key names to tell our state what props to watch for and let us
+smart with our updates, we can pass in key names into the `props` argument to tell our state what props to watch for and let us
 know if any changes have occurred:
 
 ```javascript
 import userState from './user-state';
 
-userState.subscribe((state) => console.log(state), 'firstName', 'lastName');
+userState.subscribe((state) => console.log(state), ['firstName', 'lastName']);
 // only changes to 'firstName' and 'lastName' will fire an event here
+```
+
+The last argument `error` is a callback in case an error is thrown within the class.
+
+```javascript
+import userState from './user-state';
+
+userState.subscribe((state) => console.log(state), [], (err) => {
+  // handle error
+  console.error(err);
+});
 ```
 
 ## Practical React Example
@@ -171,7 +182,9 @@ export function DisplayAge() {
     const ageObserver = userState.subscribe(({ age }) => {
       updateAge(age);
       updateIsAdult(userState.isAdult());
-    }, 'age');
+    }, ['age'], (err) => {
+      console.error(err);
+    });
     return ageObserver.unsubscribe;
   }, []);  
   
