@@ -1,4 +1,5 @@
 import EventEmitter from './event-emitter';
+import { isObject } from './utils'
 
 /**
  * Simple State
@@ -13,7 +14,7 @@ export default class SimpleState {
     const state = typeof newState === 'function'
       ? newState(this.state)
       : newState;
-    if (typeof state === 'object' && !Array.isArray(state)) {
+    if (isObject(state)) {
       const prevState = Object.assign({}, this.state);
       this.state = Object.assign({}, this.state, state);
       this.emitter.next(prevState, this.state);
