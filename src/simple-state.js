@@ -10,9 +10,9 @@ export default class SimpleState {
     this.__default_state = defaultState || {};
     this.__emitter = new EventEmitter();
     this.state = defaultState || {};
+    this.onSetBefore = (state) => state;
+    this.onSetAfter = () => {};
   }
-  onSetBefore = (state) => state;
-  onSetAfter = () => {};
   set(newState) {
     return this.__setState(newState, true);
   }
