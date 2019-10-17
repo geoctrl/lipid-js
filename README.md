@@ -23,8 +23,8 @@ To use simple-state, just instantiate the `SimpleState` class:
 ```javascript
 import SimpleState from '@geoctrl/simple-state';
   
-const userState = new SimpleState();
-console.log(userState.get()); // {}
+const myState = new SimpleState();
+console.log(myState.get()); // {}
 ```
 
 Each instantiated state is a separate instance of the `simple-state` class, and contains all the methods needed
@@ -37,16 +37,18 @@ You can add a default state by passing in an object as the first argument:
 ```javascript
 import SimpleState from '@geoctrl/simple-state';
 
-const userState = new SimpleState({
+const myState = new SimpleState({
   firstName: 'John',
   lastName: 'Doe',
   age: 5,
 });
 
-console.log(userState.get().name); // 'John'
+console.log(myState.get().name); // 'John'
 ```
 
-#### Extend State
+You can also reset to your default state with the `reset()` method. Continue reading for details.
+
+#### Extend your state
 
 If you need to add complicated logic or ajax calls when you change state, we can extend the `SimpleState` class
 with any sort of methods that we want:
@@ -54,7 +56,7 @@ with any sort of methods that we want:
 ```javascript
 import SimpleState from '@geoctrl/simple-state';
 
-class UserState extends SimpleState {
+class MyState extends SimpleState {
   isAdult() {
     return this.state.age >= 18;
   }
@@ -63,13 +65,13 @@ class UserState extends SimpleState {
   }
 }
 
-const userState = new UserState({ age: 5 });
-console.log(userState.isAdult()); // false
+const myState = new MyState({ age: 5 });
+console.log(myState.isAdult()); // false
 ``` 
 
 ## Using your state
 
-Using the example above, we can now use our `userState` in our app.
+Using the example above, we can now use our `myState` in our app.
 
 #### .set(state)
 
@@ -81,7 +83,7 @@ instantiated instance:
 ```javascript
 import SimpleState from '@geoctrl/simple-state';
 
-class UserState extends SimpleState {
+class MyState extends SimpleState {
   updateName(name) {
     const fullName = name.split(' ');
     this.set({
@@ -91,31 +93,56 @@ class UserState extends SimpleState {
   }
 }
 
-const userState = new UserState();
-userState.updateName('John Doe');
+const myState = new MyState();
+myState.updateName('John Doe');
 ```
 
 **from the instantiated instance:**
 
 ```javascript
-import userState from './user-state';
+import myState from './my-state';
 
-userState.set({
+myState.set({
   firstName: 'John',
   lastName: 'Doe',
 });
 ```
 
-#### .get()
+#### .get(key)
 
-Get the entire state object with the `.get()` method.
+Get the entire state object with no arguments (`.get()`), or pass in a key to get one property (`.get(key)`):
 
 ```javascript
-import userState from './user-state';
+import SimpleState from '@geoctrl/simple-state';
 
-const state = userState.get();
-const age = userState.get().age;
-const { name } = userState.get();
+const myState = new SimpleState({ age: 29 });
+myState.get(); // { age: 29 }
+myState.get('age'); // 29
+```
+
+#### .clear()
+
+Completely clear state (empty object). This method will emit changes to all subscribers.
+
+```javascript
+import myState from './my-state';
+
+const state = myState.get({ age: 29 });
+state.clear();
+state.get(); // {}
+```
+
+#### .reset()
+
+Reset state back to `defaultState` (passed in during instantiation). This method will emit changes to all subscribers.
+
+```javascript
+import SimpleState from '@geoctrl/simple-state';
+
+const myState = new SimpleState({ age: 29 });
+myState.set({ age: 32, show: true });
+myState.reset();
+myState.get(); // { age: 29 }
 ```
 
 #### .subscribe(next, props, error)
@@ -125,9 +152,9 @@ in a callback to be called on every change:
 
 ```javascript
 // from the instantiated instance:
-import userState from './user-state';
+import myState from './my-state';
 
-userState.subscribe((state) => console.log(state));
+myState.subscribe((state) => console.log(state));
 ```
 
 If your state is big, there's a good chance that not every observer will want all changes. To make sure we're being
@@ -135,53 +162,88 @@ smart with our updates, we can pass in key names into the `props` argument to te
 know if any changes have occurred:
 
 ```javascript
-import userState from './user-state';
+import myState from './my-state';
 
-userState.subscribe((state) => console.log(state), ['firstName', 'lastName']);
+myState.subscribe((state) => console.log(state), ['firstName', 'lastName']);
 // only changes to 'firstName' and 'lastName' will fire an event here
 ```
 
 The last argument `error` is a callback in case an error is thrown within the class.
 
 ```javascript
-import userState from './user-state';
+import myState from './my-state';
 
-userState.subscribe((state) => console.log(state), [], (err) => {
+myState.subscribe((state) => console.log(state), [], (err) => {
   // handle error
   console.error(err);
 });
 ```
 
+## State set hooks
+
+#### .onSetBefore(state) => state 
+
+Manipulate state before `set` is called. Requires state to be returned.
+
+```javascript
+class MyState extends SimpleState {
+  onSetBefore(state) {
+    return {
+      ...state,
+      lastUpdated: new Date(),
+    }
+  }
+}
+const myState = new MyState();
+myState.set({ age: 29 });
+state.get(); // { age: 29, lastUpdated: 1571291829316 }
+```
+
+#### .onSetAfter(state) 
+
+Do side-effect things after `set` is called.
+
+```javascript
+class MyState extends SimpleState {
+  onSetAfter(state) {
+    updateStorage('myState', state).then(() => {});
+  }
+}
+```
+
+**Warning:** calling `this.set()` within a hook will result in an infinite loop and will crash your app 😨. Don't do that.
+
+
 ## Practical React Example
 
-**user-state.js**
+**my-state.js**
 
 ```javascript
 import SimpleState from '@geoctrl/simple-state';
 
-class UserState extends SimpleState {
+class MyState extends SimpleState {
   isAdult() {
     return this.state.age >= 18;
   }
 }
 
-export default new UserState();
+export default new MyState();
 ```
 
 **app.js**
 
 ```javascript
 import React, { useState, useEffect } from 'react';
-import userState from './user-state';
+import myState from './my-state';
 
 export function DisplayAge() {
-  const [age, updateAge] = useState(userState.state.age);
-  const [isAdult, updateIsAdult] = useState(userState.isAdult());
+  const [age, updateAge] = useState(myState.state.age);
+  const [isAdult, updateIsAdult] = useState(myState.isAdult());
   
   useEffect(() => {
-    const ageObserver = userState.subscribe(({ age }) => {
+    const ageObserver = myState.subscribe(({ age }) => {
       updateAge(age);
-      updateIsAdult(userState.isAdult());
+      updateIsAdult(myState.isAdult());
     }, ['age'], (err) => {
       console.error(err);
     });

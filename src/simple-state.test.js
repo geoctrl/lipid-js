@@ -20,7 +20,7 @@ describe(`SimpleState`, () => {
 
   test(`Should create a simple state instance with state and emitter`, () => {
     expect(simpleState.state).toEqual({});
-    expect(simpleState.emitter).toEqual(new EventEmitter());
+    expect(simpleState.__emitter).toEqual(new EventEmitter());
   });
 
   test(`Should update state on set`, () => {
@@ -75,5 +75,35 @@ describe(`SimpleState`, () => {
     const state = new SimpleState();
     expect(() => state.subscribe(null)).toThrowError();
   });
+
+  test(`Should reset to default state`, () => {
+    const defaultState = { thing1: 1, thing2: 'two' };
+    const state = new SimpleState(defaultState);
+    expect(state.state).toEqual(defaultState);
+    state.set({ thing1: 2, thing2: 'three' });
+    expect(state.state.thing1 === defaultState.thing1).toBeFalsy();
+    state.reset();
+    expect(state.state.thing1 === defaultState.thing1).toBeTruthy();
+  });
+
+  test(`Should call set hooks`, () => {
+    const setBeforeFn = jest.fn(state => state);
+    const setAfterFn = jest.fn();
+    class MyState extends SimpleState {
+      onSetBefore = setBeforeFn
+      onSetAfter = setAfterFn
+    }
+    const myState = new MyState();
+    myState.set({ hi: 'mom' });
+    expect(setBeforeFn).toBeCalled();
+    expect(setAfterFn).toBeCalled();
+  });
+
+  test(`should clear state`, () => {
+    const state = new SimpleState({ hello: 'world!' });
+    expect(state.state).toEqual({ hello: 'world!' });
+    state.clear();
+    expect(state.state).toEqual({});
+  })
 
 });
