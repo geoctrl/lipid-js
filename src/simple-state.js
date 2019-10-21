@@ -26,7 +26,7 @@ export default class SimpleState {
       this.state = append
         ? Object.assign({}, this.state, state)
         : Object.assign({}, state);
-      this.onSetAfter(this.state);
+      this.onSetAfter(this.state, newState);
       this.__emitter.next(prevState, this.state);
     } else {
       this.__emitter.error(new TypeError(`[${this.constructor.name}] set(state) - "state" must be an object`));

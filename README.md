@@ -199,9 +199,14 @@ myState.set({ age: 29 });
 state.get(); // { age: 29, lastUpdated: 1571291829316 }
 ```
 
-#### .onSetAfter(state) 
+#### .onSetAfter(newState, delta) 
 
 Do side-effect things after `set` is called.
+
+**Args**
+
+- `newState` - new state
+- `delta` - new state passed in to `.set()`. This helps us perform specific operations based on the delta properties.
 
 ```javascript
 class MyState extends SimpleState {
