@@ -7,8 +7,8 @@ config.entry = resolve(__dirname, 'src/simple-state.js');
 config.output = {
   path: resolve(__dirname, 'build'),
   filename: 'index.js',
-  library: 'comfy',
-  libraryTarget: 'umd',
+  library: 'simple-state',
+  libraryTarget: 'commonjs2',
 };
 
 config.module = {
