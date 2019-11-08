@@ -17,7 +17,7 @@ export default class EventEmitter {
   next(prevState, state) {
     this.observers.forEach(observer => {
       if (!observer.props.length) {
-        observer.next(state);
+        observer.next(state, prevState);
       } else if (
         observer.props &&
         observer.props.reduce((final, prop) => {
@@ -27,7 +27,7 @@ export default class EventEmitter {
           return final;
         }, []).length)
       {
-        observer.next(state);
+        observer.next(state, prevState);
       }
     });
   }
