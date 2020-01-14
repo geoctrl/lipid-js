@@ -28,5 +28,8 @@
     "webpack-cli": "^3.3.9",
     "webpack-dev-server": "^3.8.2"
   },
-  "dependencies": {}
+  "dependencies": {
+    "lodash": "^4.17.15",
+    "rxjs": "^6.5.4"
+  }
 }

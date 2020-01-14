@@ -1,49 +1,68 @@
-import EventEmitter from './event-emitter';
-import { isObject } from './utils'
+import { Subject } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
+import { isEqual, intersection, isObject } from 'lodash';
 
-/**
- * Simple State
- * @param {object} defaultState
- */
 export default class SimpleState {
-  constructor(defaultState) {
-    this.__default_state = defaultState || {};
-    this.__emitter = new EventEmitter();
-    this.state = defaultState || {};
-    this.onSetBefore = (state) => state;
-    this.onSetAfter = () => {};
+  constructor(state) {
+    this.state = state || {};
   }
-  set(newState) {
-    return this.__setState(newState, true);
+
+  __watchers = [];
+  onSetBefore = state => state;
+  onSetAfter = () => {}
+
+  observe = (...props) => {
+    const obs = (new Subject())
+      .pipe(
+        filter(({ state, prevState, delta }) => {
+          if (!props || !props.length) return true;
+          const keyProps = intersection(props, Object.keys(delta));
+          return keyProps.reduce((final, prop) => {
+            if (!isEqual(state[prop], prevState[prop])) {
+              return [...final, prop]
+            }
+            return final;
+          }, []).length
+        }),
+        map(({ state, prevState, delta }) => ({ state, prevState }))
+      );
+    this.__watchers.push(obs);
+    return obs;
   }
-  __setState(newState, append) {
-    let state = typeof newState === 'function'
+
+  __set = (newState, emit, clear) => {
+    let delta = typeof newState === 'function'
       ? newState(this.state)
       : newState;
-    if (isObject(state)) {
-      state = this.onSetBefore(state);
-      const prevState = Object.assign({}, this.state);
-      this.state = append
-        ? Object.assign({}, this.state, state)
-        : Object.assign({}, state);
-      this.onSetAfter(this.state, state);
-      this.__emitter.next(prevState, this.state);
-    } else {
-      this.__emitter.error(new TypeError(`[${this.constructor.name}] set(state) - "state" must be an object`));
+    if (!isObject(delta)) {
+      new TypeError(`[${this.constructor.name}] "state" argument must be an object`)
+      return;
+    }
+    delta = this.onSetBefore(delta);
+    const prevState = Object.assign({}, this.state);
+
+    this.state = clear
+      ? Object.assign({}, delta)
+      : Object.assign({}, this.state, delta);
+
+    this.onSetAfter(this.state, delta);
+    if (emit) {
+      this.__watchers.forEach(obs => {
+        obs.next({ state: this.state, prevState, delta });
+      });
     }
     return this.state;
   }
-  get(key) {
-    if (key) return this.state[key];
-    return this.state;
+
+  set = (state) => {
+    return this.__set(state, true);
   }
-  reset() {
-    return this.__setState(this.__default_state, false);
+
+  setNoEmit = (state) => {
+    return this.__set(state, false);
   }
-  clear() {
-    return this.__setState({}, false);
-  }
-  subscribe(next, props, error) {
-    return this.__emitter.subscribe(next, props, error);
+
+  overrideState = (state) => {
+    return this.__set(state, true, true);
   }
 }

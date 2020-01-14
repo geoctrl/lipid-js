@@ -1,5 +1,4 @@
 import SimpleState from './simple-state';
-import EventEmitter from './event-emitter';
 
 describe(`SimpleState`, () => {
   const simpleState = new SimpleState();
@@ -18,10 +17,10 @@ describe(`SimpleState`, () => {
   }
   const advancedState = new AdvancedState();
 
-  test(`Should create a simple state instance with state and emitter`, () => {
-    expect(simpleState.state).toEqual({});
-    expect(simpleState.__emitter).toEqual(new EventEmitter());
-  });
+  // test(`Should create a simple state instance with state and emitter`, () => {
+  //   expect(simpleState.state).toEqual({});
+  //   expect(simpleState.__emitter).toEqual(new EventEmitter());
+  // });
 
   test(`Should update state on set`, () => {
     simpleState.set({ name: 'John Doe' });
