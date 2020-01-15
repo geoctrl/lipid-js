@@ -15,7 +15,9 @@ describe(`SimpleState`, () => {
       this.set({ age: age * 2 });
     }
   }
-  const advancedState = new AdvancedState();
+  const advancedState = new AdvancedState({
+    thing: 10
+  });
 
   // test(`Should create a simple state instance with state and emitter`, () => {
   //   expect(simpleState.state).toEqual({});
@@ -45,7 +47,7 @@ describe(`SimpleState`, () => {
   });
 
   test(`Should fire callback on change`, () => {
-    observer = advancedState.subscribe(subscriber);
+    observer = advancedState.pick('age').subscribe(subscriber);
     advancedState.set({ age: '18' });
     expect(subscriber.mock.calls.length).toEqual(1);
   });
@@ -58,21 +60,21 @@ describe(`SimpleState`, () => {
 
   test(`Should unsubscribe`, () => {
     observer.unsubscribe();
-    advancedState.set({ age: 20 });
+    console.log(advancedState.state);
+    advancedState.set({ age: 20, thing: 10 });
     expect(subscriber.mock.calls.length).toEqual(2);
   });
 
-  test(`Should call error handler if not an object`, () => {
+  test(`Should require object for sets`, () => {
     const state = new SimpleState();
-    const onError = jest.fn();
-    state.subscribe(() => {}, [], onError);
-    state.set('not an object');
-    expect(onError).toBeCalled();
-  });
-
-  test(`Should throw if next is not a function`, () => {
-    const state = new SimpleState();
-    expect(() => state.subscribe(null)).toThrowError();
+    state.pick();
+    let error;
+    try {
+      state.set('not an object');
+    } catch (e) {
+      error = e;
+    }
+    expect(error).toBeTruthy();
   });
 
   test(`Should reset to default state`, () => {
@@ -81,7 +83,7 @@ describe(`SimpleState`, () => {
     expect(state.state).toEqual(defaultState);
     state.set({ thing1: 2, thing2: 'three' });
     expect(state.state.thing1 === defaultState.thing1).toBeFalsy();
-    state.reset();
+    state.setOverride(defaultState);
     expect(state.state.thing1 === defaultState.thing1).toBeTruthy();
   });
 

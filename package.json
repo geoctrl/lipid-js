@@ -1,13 +1,13 @@
 {
   "name": "@geoctrl/simple-state",
-  "version": "1.0.8",
+  "version": "2.0.0",
   "main": "build/index.js",
   "author": "@geoctrl",
   "license": "MIT",
   "repository": "github:geoctrl/simple-state",
   "scripts": {
-    "start": "webpack-dev-server --config ./webpack.config.js",
-    "build": "webpack --config ./webpack.config.build.js",
+    "start": "webpack-dev-server",
+    "build": "webpack",
     "test": "jest ./src",
     "test-watch": "jest ./src --watch"
   },

@@ -12,7 +12,7 @@ class Base extends Component {
       three: 3,
     });
 
-    const obs = myState.observe('one', 'three').subscribe(({ state, prevState}) => {
+    const obs = myState.pick('one', 'three').subscribe(({ state, prevState}) => {
       console.log('done', prevState, state);
     });
 
@@ -20,7 +20,7 @@ class Base extends Component {
       myState.set({
         one: 2,
       });
-
+      obs.unsubscribe();
     }, 2000);
 
     setTimeout(() => {
