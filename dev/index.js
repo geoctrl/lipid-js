@@ -1,6 +1,27 @@
-import React, { Component } from 'react';
+import React, { Component, useEffect } from 'react';
 import { render } from 'react-dom';
-import SimpleState from '../src/simple-state';
+import SimpleState, { SimpleState, useSimpleState } from '../src/simple-state';
+
+const myState = new SimpleState({
+  age: 18,
+});
+
+function Base() {
+  const { state, prevState, delta } = useSimpleState(['age']);
+
+
+  useEffect(() => {
+    setTimeout(() => {
+
+    }, 2000);
+  }, []);
+
+  return (
+    <div>
+      hello
+    </div>
+  )
+}
 
 class Base extends Component {
   constructor(props) {
@@ -12,7 +33,7 @@ class Base extends Component {
       three: 3,
     });
 
-    const obs = myState.pick('one', 'three').subscribe(({ state, prevState}) => {
+    const obs = myState.on(['one', 'three']).subscribe(({ state, prevState}) => {
       console.log('done', prevState, state);
     });
 
@@ -32,9 +53,6 @@ class Base extends Component {
   }
   render() {
     return (
-      <div>
-        hello
-      </div>
     );
   }
 }

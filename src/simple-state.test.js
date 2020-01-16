@@ -19,11 +19,6 @@ describe(`SimpleState`, () => {
     thing: 10
   });
 
-  // test(`Should create a simple state instance with state and emitter`, () => {
-  //   expect(simpleState.state).toEqual({});
-  //   expect(simpleState.__emitter).toEqual(new EventEmitter());
-  // });
-
   test(`Should update state on set`, () => {
     simpleState.set({ name: 'John Doe' });
     const { name } = simpleState.get();
@@ -47,7 +42,7 @@ describe(`SimpleState`, () => {
   });
 
   test(`Should fire callback on change`, () => {
-    observer = advancedState.pick('age').subscribe(subscriber);
+    observer = advancedState.on(['age']).subscribe(subscriber);
     advancedState.set({ age: '18' });
     expect(subscriber.mock.calls.length).toEqual(1);
   });
@@ -67,7 +62,7 @@ describe(`SimpleState`, () => {
 
   test(`Should require object for sets`, () => {
     const state = new SimpleState();
-    state.pick();
+    state.on().subscribe(() => {});
     let error;
     try {
       state.set('not an object');
@@ -83,7 +78,7 @@ describe(`SimpleState`, () => {
     expect(state.state).toEqual(defaultState);
     state.set({ thing1: 2, thing2: 'three' });
     expect(state.state.thing1 === defaultState.thing1).toBeFalsy();
-    state.setOverride(defaultState);
+    state.set(defaultState, { clear: true });
     expect(state.state.thing1 === defaultState.thing1).toBeTruthy();
   });
 
@@ -91,8 +86,8 @@ describe(`SimpleState`, () => {
     const setBeforeFn = jest.fn(state => state);
     const setAfterFn = jest.fn();
     class MyState extends SimpleState {
-      onSetBefore = setBeforeFn
-      onSetAfter = setAfterFn
+      __onSetBefore = setBeforeFn
+      __onSetAfter = setAfterFn
     }
     const myState = new MyState();
     myState.set({ hi: 'mom' });
@@ -103,7 +98,7 @@ describe(`SimpleState`, () => {
   test(`should clear state`, () => {
     const state = new SimpleState({ hello: 'world!' });
     expect(state.state).toEqual({ hello: 'world!' });
-    state.clear();
+    state.set({}, { clear: true });
     expect(state.state).toEqual({});
   })
 
