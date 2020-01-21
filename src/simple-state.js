@@ -5,14 +5,13 @@ import { isEqual, intersection, isObject, get } from 'lodash';
 export default class SimpleState {
   constructor(state) {
     this.__defaultState = Object.assign({}, state);
+    this.__onSetBefore = state => state;
+    this.__onSetAfter = () => {}
+    this.__obs = new Subject();
     this.state = state || {};
   }
 
-  __onSetBefore = state => state;
-  __onSetAfter = () => {}
-  __obs = new Subject();
-
-  on = (props = []) => {
+  on(props = []) {
     return this.__obs.pipe(
       filter(({ state, prevState, delta }) => {
         if (!props || !props.length) return true;
@@ -24,15 +23,18 @@ export default class SimpleState {
           return final;
         }, []).length
       }),
-      map(({ state, prevState, delta }) => ({ state, prevState }))
+      map(({ state, prevState, delta }) => {
+        console.log(state);
+        return ({ state, prevState });
+      })
     );
   }
 
-  get = (prop = '') => {
+  get(prop = '') {
     return prop ? this.state[prop] : this.state;
   }
 
-  set = (newState = {}, config) => {
+  set(newState = {}, config) {
     const emit = get(config, 'emit', true);
     const clear = get(config, 'clear', false);
 
@@ -56,7 +58,7 @@ export default class SimpleState {
     return this.state;
   }
 
-  reset = (config) => {
+  reset(config) {
     return this.set(this.__defaultState, {
       emit: get(config, 'emit', true),
       clear: get(config, 'clear', true),

@@ -7,26 +7,26 @@
   "repository": "github:geoctrl/simple-state",
   "scripts": {
     "start": "webpack-dev-server",
-    "build": "webpack",
+    "build": "webpack --config webpack.config.build.js",
     "test": "jest ./src",
     "test-watch": "jest ./src --watch"
   },
   "devDependencies": {
-    "@babel/core": "^7.6.4",
-    "@babel/plugin-proposal-class-properties": "^7.5.5",
-    "@babel/plugin-proposal-object-rest-spread": "^7.6.2",
-    "@babel/plugin-syntax-decorators": "^7.2.0",
-    "@babel/preset-env": "^7.6.3",
-    "@babel/preset-react": "^7.6.3",
+    "@babel/core": "^7.8.3",
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "@babel/plugin-proposal-object-rest-spread": "^7.8.3",
+    "@babel/plugin-syntax-decorators": "^7.8.3",
+    "@babel/preset-env": "^7.8.3",
+    "@babel/preset-react": "^7.8.3",
     "babel-jest": "^24.9.0",
     "babel-loader": "^8.0.6",
     "jest": "^24.9.0",
     "jest-cli": "^24.9.0",
-    "react": "^16.10.2",
-    "react-dom": "^16.10.2",
-    "webpack": "^4.41.2",
-    "webpack-cli": "^3.3.9",
-    "webpack-dev-server": "^3.8.2"
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "webpack": "^4.41.5",
+    "webpack-cli": "^3.3.10",
+    "webpack-dev-server": "^3.10.1"
   },
   "dependencies": {
     "lodash": "^4.17.15",
