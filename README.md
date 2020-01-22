@@ -4,16 +4,14 @@ Lipid is simple state management.
 
 ## Install
 
-`lipid` has a peer dependency of rxjs, so let's install that too:
-
 ```shell
 # NPM
-$ npm install -S lipid rxjs
+$ npm install -S lipid
 ```
 
 ```shell
 # yarn
-$ yarn add lipid rxjs
+$ yarn add lipid
 ```
 
 ## Setting up your state

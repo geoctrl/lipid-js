@@ -23,8 +23,4 @@ config.module = {
   ],
 };
 
-config.externals = {
-  rxjs: 'rxjs',
-};
-
 module.exports = config;
