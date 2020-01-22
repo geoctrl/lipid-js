@@ -1,10 +1,10 @@
-import SimpleState from './simple-state';
+import Lipid from './lipid';
 
-describe(`SimpleState`, () => {
-  const simpleState = new SimpleState();
+describe(`Lipid`, () => {
+  const myState = new Lipid();
   const subscriber = jest.fn();
   let observer;
-  class AdvancedState extends SimpleState {
+  class AdvancedState extends Lipid {
     readableName() {
       return this.state.name
         .split('_')
@@ -20,20 +20,20 @@ describe(`SimpleState`, () => {
   });
 
   test(`Should update state on set`, () => {
-    simpleState.set({ name: 'John Doe' });
-    const { name } = simpleState.get();
+    myState.set({ name: 'John Doe' });
+    const { name } = myState.get();
     expect(name).toEqual('John Doe');
   });
 
   test(`Should allow previous state to be accessed using a function`, () => {
-    simpleState.set({ age: 9 });
-    simpleState.set(prevState => ({ age: prevState.age * 2 }));
-    expect(simpleState.get().age).toEqual(18);
+    myState.set({ age: 9 });
+    myState.set(prevState => ({ age: prevState.age * 2 }));
+    expect(myState.get().age).toEqual(18);
   });
 
   test(`Should retrieve entire state object on get`, () => {
-    simpleState.set({ age: 18 });
-    expect(simpleState.get()).toEqual({ name: 'John Doe', age: 18 });
+    myState.set({ age: 18 });
+    expect(myState.get()).toEqual({ name: 'John Doe', age: 18 });
   });
 
   test(`Custom methods should compute from state`, () => {
@@ -61,7 +61,7 @@ describe(`SimpleState`, () => {
   });
 
   test(`Should require object for sets`, () => {
-    const state = new SimpleState();
+    const state = new Lipid();
     state.on().subscribe(() => {});
     let error;
     try {
@@ -74,7 +74,7 @@ describe(`SimpleState`, () => {
 
   test(`Should reset to default state`, () => {
     const defaultState = { thing1: 1, thing2: 'two' };
-    const state = new SimpleState(defaultState);
+    const state = new Lipid(defaultState);
     expect(state.state).toEqual(defaultState);
     state.set({ thing1: 2, thing2: 'three' });
     expect(state.state.thing1 === defaultState.thing1).toBeFalsy();
@@ -85,9 +85,9 @@ describe(`SimpleState`, () => {
   test(`Should call set hooks`, () => {
     const setBeforeFn = jest.fn(state => state);
     const setAfterFn = jest.fn();
-    class MyState extends SimpleState {
-      __onSetBefore = setBeforeFn
-      __onSetAfter = setAfterFn
+    class MyState extends Lipid {
+      onSetBefore = setBeforeFn
+      onSetAfter = setAfterFn
     }
     const myState = new MyState();
     myState.set({ hi: 'mom' });
@@ -96,7 +96,7 @@ describe(`SimpleState`, () => {
   });
 
   test(`should clear state`, () => {
-    const state = new SimpleState({ hello: 'world!' });
+    const state = new Lipid({ hello: 'world!' });
     expect(state.state).toEqual({ hello: 'world!' });
     state.set({}, { clear: true });
     expect(state.state).toEqual({});

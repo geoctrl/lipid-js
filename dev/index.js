@@ -1,8 +1,8 @@
 import React, { Component, useEffect } from 'react';
 import { render } from 'react-dom';
-import SimpleState from '../src/simple-state';
+import Lipid from '../src/lipid';
 
-const myState = new SimpleState({
+const myState = new Lipid({
   age: 18,
 });
 
@@ -10,7 +10,7 @@ class Base extends Component {
   constructor(props) {
     super(props);
 
-    const myState = new SimpleState({
+    const myState = new Lipid({
       one: 1,
       two: 2,
       three: 3,

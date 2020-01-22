@@ -1,1 +1,1 @@
-module.exports = require('./src/simple-state');
+module.exports = require('./src/lipid');

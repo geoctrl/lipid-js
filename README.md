@@ -1,43 +1,45 @@
-# Simple State
+# Lipid
 
-Simple state management that scales with your application. No dependencies. Less than 1kb gzipped.
+Lipid is simple state management. 
 
 ## Install
 
+`lipid` has a peer dependency of rxjs, so let's install that too:
+
 ```shell
 # NPM
-$ npm install -S @geoctrl/simple-state
+$ npm install -S lipid rxjs
 ```
 
 ```shell
 # yarn
-$ yarn add @geoctrl/simple-state
+$ yarn add lipid rxjs
 ```
 
 ## Setting up your state
 
-#### Simple Example
+### Simple Example
 
-To use simple-state, just instantiate the `SimpleState` class:
+Get started by instantiating the `Lipid` class:
 
 ```javascript
-import SimpleState from '@geoctrl/simple-state';
+import Lipid from 'lipid';
   
-const myState = new SimpleState();
+const myState = new Lipid();
 console.log(myState.get()); // {}
 ```
 
-Each instantiated state is a separate instance of the `simple-state` class, and contains all the methods needed
+Each instantiated state is a separate instance of the `Lipid` class, and contains all the methods needed
 to use the state.
 
-#### Default State
+### Default State
 
 You can add a default state by passing in an object as the first argument:
 
 ```javascript
-import SimpleState from '@geoctrl/simple-state';
+import Lipid from 'lipid';
 
-const myState = new SimpleState({
+const myState = new Lipid({
   firstName: 'John',
   lastName: 'Doe',
   age: 5,
@@ -48,15 +50,15 @@ console.log(myState.get().name); // 'John'
 
 You can also reset to your default state with the `reset()` method. Continue reading for details.
 
-#### Extend your state
+### Extend your state
 
-If you need to add complicated logic or ajax calls when you change state, we can extend the `SimpleState` class
+If you need to add complicated logic or ajax calls when you change state, we can extend the `Lipid` class
 with any sort of methods that we want:
 
 ```javascript
-import SimpleState from '@geoctrl/simple-state';
+import Lipid from 'lipid';
 
-class MyState extends SimpleState {
+class MyState extends Lipid {
   isAdult() {
     return this.state.age >= 18;
   }
@@ -71,19 +73,27 @@ console.log(myState.isAdult()); // false
 
 ## Using your state
 
-Using the example above, we can now use our `myState` in our app.
+### .set(state, [options])
 
-#### .set(state)
+#### `state` (object)
 
-To set data on your state, you need to use the `.set()` method. This can be done within your extending class, or your
-instantiated instance:
+Object to append to state.
+
+#### `options` (object)
+
+| Property | Description | Type | Default |
+| --- | --- | --- | --- 
+| `emit` | Emit to subscribers | `bool` | `true` |
+| `clear` | Clear state before setting | `bool` | `false` |
+
+Set state within your extending class, or with your instantiated instance:
 
 **inside your extending class:**
 
 ```javascript
-import SimpleState from '@geoctrl/simple-state';
+import Lipid from 'lipid';
 
-class MyState extends SimpleState {
+class MyState extends Lipid {
   updateName(name) {
     const fullName = name.split(' ');
     this.set({
@@ -108,85 +118,60 @@ myState.set({
 });
 ```
 
-#### .get(key)
+### .get(key)
 
 Get the entire state object with no arguments (`.get()`), or pass in a key to get one property (`.get(key)`):
 
 ```javascript
-import SimpleState from '@geoctrl/simple-state';
+import Lipid from 'lipid';
 
-const myState = new SimpleState({ age: 29 });
+const myState = new Lipid({ age: 29 });
 myState.get(); // { age: 29 }
 myState.get('age'); // 29
 ```
 
-#### .clear()
-
-Completely clear state (empty object). This method will emit changes to all subscribers.
-
-```javascript
-import myState from './my-state';
-
-const state = myState.get({ age: 29 });
-state.clear();
-state.get(); // {}
-```
-
-#### .reset()
+### .reset()
 
 Reset state back to `defaultState` (passed in during instantiation). This method will emit changes to all subscribers.
 
 ```javascript
-import SimpleState from '@geoctrl/simple-state';
+import Lipid from 'lipid';
 
-const myState = new SimpleState({ age: 29 });
+const myState = new Lipid({ age: 29 });
 myState.set({ age: 32, show: true });
 myState.reset();
 myState.get(); // { age: 29 }
 ```
 
-#### .subscribe(next, props, error)
+### .on([props])
 
-Subscribe allows us to get incremental changes over time. Much like how observables work, we subscribe to the state and pass
-in a callback to be called on every change:
+Lipid uses observables to emit events across your app. To create an observable you can subscribe to,
+call the `.on()` method.
+
+If the `props` argument is empty (`.on()` or `.on([])`), all props changes will emit to this
+subscriber. You can also pass an array of strings to pick and choose what to listen to:
 
 ```javascript
-// from the instantiated instance:
-import myState from './my-state';
-
-myState.subscribe((state) => console.log(state));
+const myObservable = myState.on(['age']);
 ```
 
-If your state is big, there's a good chance that not every observer will want all changes. To make sure we're being
-smart with our updates, we can pass in key names into the `props` argument to tell our state what props to watch for and let us
-know if any changes have occurred:
+Observables use the latest version of rxjs, so feel free to pipe to your heart's content:
 
 ```javascript
-import myState from './my-state';
-
-myState.subscribe((state) => console.log(state), ['firstName', 'lastName']);
-// only changes to 'firstName' and 'lastName' will fire an event here
-```
-
-The last argument `error` is a callback in case an error is thrown within the class.
-
-```javascript
-import myState from './my-state';
-
-myState.subscribe((state) => console.log(state), [], (err) => {
-  // handle error
-  console.error(err);
+myObservable.subscribe(({ state }) => {
+  console.log(state.age);
+  // only emits 'age' changes
 });
 ```
 
-## State set hooks
+## Internal state hooks
 
-#### .onSetBefore(state) => state 
+### .onSetBefore(state) => state 
 
 Manipulate state before `set` is called. Requires state to be returned.
 
 ```javascript
-class MyState extends SimpleState {
+class MyState extends Lipid {
   onSetBefore(state) {
     return {
       ...state,
@@ -199,7 +184,7 @@ myState.set({ age: 29 });
 state.get(); // { age: 29, lastUpdated: 1571291829316 }
 ```
 
-#### .onSetAfter(newState, delta) 
+### .onSetAfter(newState, delta) 
 
 Do side-effect things after `set` is called.
 
@@ -209,7 +194,7 @@ Do side-effect things after `set` is called.
 - `delta` - new state passed in to `.set()`. This helps us perform specific operations based on the delta properties.
 
 ```javascript
-class MyState extends SimpleState {
+class MyState extends Lipid {
   onSetAfter(state) {
     updateStorage('myState', state).then(() => {});
   }
@@ -224,9 +209,9 @@ class MyState extends SimpleState {
 **my-state.js**
 
 ```javascript
-import SimpleState from '@geoctrl/simple-state';
+import Lipid from 'lipid';
 
-class MyState extends SimpleState {
+class MyState extends Lipid {
   isAdult() {
     return this.state.age >= 18;
   }

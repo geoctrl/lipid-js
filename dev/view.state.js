@@ -1,6 +1,6 @@
-import SimpleState from '../index';
+import Lipid from '../index';
 
-class ViewState extends SimpleState {
+class ViewState extends Lipid {
   isTen() {
     return this.state.number === 10;
   }
