@@ -34,7 +34,7 @@ export default class Lipid {
     return prop ? this.state[prop] : this.state;
   }
 
-  set(newState = {}, options) {
+  set(newState = {}, options = {}) {
     const emit = typeof options.emit === 'boolean' ? options.emit : true;
     const clear = typeof options.clear === 'boolean' ? options.clear : false;
 
