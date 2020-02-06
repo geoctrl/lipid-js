@@ -55,7 +55,6 @@ describe(`Lipid`, () => {
 
   test(`Should unsubscribe`, () => {
     observer.unsubscribe();
-    console.log(advancedState.state);
     advancedState.set({ age: 20, thing: 10 });
     expect(subscriber.mock.calls.length).toEqual(2);
   });

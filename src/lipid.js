@@ -24,7 +24,6 @@ export default class Lipid {
         }, []).length
       }),
       map(({ state, prevState, delta }) => {
-        console.log(state);
         return ({ state, prevState });
       })
     );
