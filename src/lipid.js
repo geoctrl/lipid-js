@@ -1,8 +1,8 @@
-import { Subject } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
-import { intersection, isEqual } from 'lodash';
+const { Subject } = require('rxjs');
+const { filter, map } = require('rxjs/operators');
+const { intersection, isEqual } = require('lodash');
 
-export default class Lipid {
+module.exports = class Lipid {
   constructor(state) {
     this.__defaultState = Object.assign({}, state);
     this.__obs = new Subject();

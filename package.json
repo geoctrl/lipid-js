@@ -1,7 +1,7 @@
 {
   "name": "lipid",
-  "version": "1.0.4",
-  "main": "build/index.js",
+  "version": "1.0.5",
+  "main": "src/lipid.js",
   "author": "@geoctrl",
   "license": "MIT",
   "repository": "github:geoctrl/lipid",
