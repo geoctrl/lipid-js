@@ -1,7 +1,7 @@
 {
   "name": "lipid",
-  "version": "1.0.6",
-  "main": "src/lipid.js",
+  "version": "1.0.7",
+  "main": "build/lipid.js",
   "author": "@geoctrl",
   "license": "MIT",
   "repository": "github:geoctrl/lipid",
@@ -13,6 +13,7 @@
     "test-watch": "jest ./src --watch"
   },
   "devDependencies": {
+    "@babel/cli": "^7.8.4",
     "@babel/core": "^7.8.3",
     "@babel/plugin-proposal-class-properties": "^7.8.3",
     "@babel/plugin-proposal-object-rest-spread": "^7.8.3",
