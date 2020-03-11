@@ -1,6 +1,6 @@
 {
   "name": "lipid",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "main": "src/lipid.js",
   "author": "@geoctrl",
   "license": "MIT",
