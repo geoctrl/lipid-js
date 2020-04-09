@@ -1,7 +1,7 @@
 {
   "name": "lipid",
-  "version": "1.0.7",
-  "main": "build/lipid.js",
+  "version": "1.0.8",
+  "main": "build/index.js",
   "author": "@geoctrl",
   "license": "MIT",
   "repository": "github:geoctrl/lipid",
@@ -9,6 +9,7 @@
   "scripts": {
     "start": "webpack-dev-server",
     "build": "webpack --config webpack.config.build.js",
+    "watch": "webpack --watch --config webpack.config.build.js",
     "test": "jest ./src",
     "test-watch": "jest ./src --watch"
   },

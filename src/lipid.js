@@ -1,6 +1,6 @@
 import { Subject } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-import { intersection, isEqual } from 'lodash';
+import { intersection, isEqual, cloneDeep } from 'lodash';
 
 export default class Lipid {
   constructor(state) {
@@ -8,7 +8,8 @@ export default class Lipid {
     this.__obs = new Subject();
     this.onSetBefore = state => state;
     this.onSetAfter = () => {}
-    this.state = state || {};
+    this.__state = state || {};
+    this.state = cloneDeep(state || {});
   }
 
   on(props = []) {
@@ -30,7 +31,7 @@ export default class Lipid {
   }
 
   get(prop = '') {
-    return prop ? this.state[prop] : this.state;
+    return prop ? cloneDeep(this.__state[prop]) : cloneDeep(this.__state);
   }
 
   set(newState = {}, options = {}) {
@@ -38,23 +39,25 @@ export default class Lipid {
     const clear = typeof options.clear === 'boolean' ? options.clear : false;
 
     let delta = typeof newState === 'function'
-      ? newState(this.state)
+      ? newState(cloneDeep(this.__state))
       : newState;
     if (!(typeof delta === 'object' && delta !== null)) {
       throw new TypeError(`[${this.constructor.name}] "state" argument must be an object`);
     }
     delta = this.onSetBefore(delta);
-    const prevState = Object.assign({}, this.state);
+    const prevState = Object.assign({}, this.__state);
 
-    this.state = clear
+    this.__state = clear
       ? Object.assign({}, delta)
-      : Object.assign({}, this.state, delta);
+      : Object.assign({}, this.__state, delta);
 
-    this.onSetAfter(this.state, delta);
+    this.state = cloneDeep(this.__state);
+
+    this.onSetAfter(this.__state, delta);
     if (emit) {
-      this.__obs.next({ state: this.state, prevState, delta })
+      this.__obs.next({ state: this.__state, prevState, delta })
     }
-    return this.state;
+    return this.__state;
   }
 
   reset(options) {
