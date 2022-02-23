@@ -11,7 +11,7 @@ export class Lipid {
   private __defaultState: State;
   private __obs: Subject<State>;
   private __state: State;
-  onSetBefore: (state?: State, delta?: State) => State;
+  onSetBefore: (state: State, delta: State) => State;
   onSetAfter: (state?: State, delta?: State) => void;
 
   constructor(state?: State) {
@@ -21,7 +21,7 @@ export class Lipid {
     this.__defaultState = state;
     this.__obs = new Subject();
     this.__state = state || {};
-    this.onSetBefore = state => state;
+    this.onSetBefore = (state, delta) => delta;
     this.onSetAfter = () => {}
   }
 
