@@ -4,7 +4,9 @@ build/
 .DS_Store
 */.DS_Store
 coverage
-index.js
-index.js.LICENSE.txt
+lipid.js
 lipid.d.ts
+lipid.js.LICENSE.txt
+lipidReactHookGenerator.js
 lipid-react-hook-generator.d.ts
+lipidReactHookGenerator.js.LICENSE.txt

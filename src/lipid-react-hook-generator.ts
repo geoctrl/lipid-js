@@ -1,4 +1,4 @@
-import Lipid from 'lipid';
+import type Lipid from './lipid';
 import type { useRef, useEffect, useState } from 'react';
 import type { Subscription } from 'rxjs';
 
