@@ -1,7 +1,7 @@
-import { Subject } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
-import intersection from 'lodash/intersection';
-import isEqual from 'lodash/isEqual';
+import type { Subject } from 'rxjs';
+import type { filter, map } from 'rxjs/operators';
+import type intersection from 'lodash/intersection';
+import type isEqual from 'lodash/isEqual';
 
 type State = Record<string, any>;
 type StateOpts = { emit?: boolean, clear?: boolean };
@@ -19,6 +19,7 @@ export default class Lipid {
       throw Error('new Lipid() "state" argument must be an object.')
     }
     this.__defaultState = state;
+    // @ts-ignore
     this.__obs = new Subject();
     this.onSetBefore = state => state;
     this.onSetAfter = () => {}
@@ -27,16 +28,20 @@ export default class Lipid {
 
   on(props: string[] = []) {
     return this.__obs.pipe(
+      // @ts-ignore
       filter(({ state, prevState, delta }) => {
         if (!props || !props.length) return true;
+        // @ts-ignore
         const keyProps = intersection(props, Object.keys(delta));
         return !!keyProps.reduce((final, prop) => {
+          // @ts-ignore
           if (!isEqual(state[prop], prevState[prop])) {
             return [...final, prop]
           }
           return final;
         }, []).length
       }),
+      // @ts-ignore
       map(({ state, prevState, delta }) => {
         return ({ state, prevState });
       })

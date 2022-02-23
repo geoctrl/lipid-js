@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "baseUrl": "",
-    "outDir": "./build/",
+    "outDir": "./",
     "sourceMap": false,
     "noImplicitAny": true,
     "allowSyntheticDefaultImports": true,
@@ -12,5 +12,5 @@
     "moduleResolution": "Node",
     "declaration": true,
   },
-  "files": ["src/lipid.ts"]
+  "files": ["src/lipid.ts", "src/lipid-react-hook-generator.ts"]
 }

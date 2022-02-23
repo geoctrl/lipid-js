@@ -2,13 +2,17 @@
 
 ## v2.0.0
 
-- Module rewritten in typescript.
+#### Changes
 
-### BREAKING
+- tree-shaking lodash with `lodash-es`
+- convert module to typescript
+- upgrade dependencies
+- add react hook generator
 
-- The `.state` property was removed. You can still get your state synchronously
-by using `.get()`.
-- 37kb
+
+#### Breaking
+
+- removed `.state` property
 
 ## v0.0.2
 

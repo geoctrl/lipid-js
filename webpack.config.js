@@ -2,10 +2,13 @@ const { resolve } = require('path');
 
 module.exports = {
   mode: 'production',
-  entry: resolve(__dirname, 'src/lipid.ts'),
+  entry: {
+    lipid: resolve(__dirname, 'src/lipid.ts'),
+    lipidReactHookGenerator: resolve(__dirname, 'src/lipid-react-hook-generator.ts'),
+  },
   output: {
-    path: resolve(__dirname, 'build'),
-    filename: 'index.js',
+    path: resolve(__dirname),
+    filename: '[name].js',
     library: {
       type: 'umd',
     },
