@@ -4,4 +4,7 @@ build/
 .DS_Store
 */.DS_Store
 coverage
-dist
+lipid.d.ts
+lipid.js
+lipid-react-hook-generator.d.ts
+lipid-react-hook-generator.js

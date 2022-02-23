@@ -1,13 +1,12 @@
 {
   "name": "lipid",
   "version": "2.0.0-beta.5",
-  "main": "dist/lipid.js",
+  "main": "./lipid.js",
   "author": "@geoctrl",
   "license": "MIT",
   "repository": "github:geoctrl/lipid",
-  "types": "./dist/index.d.ts",
   "scripts": {
-    "build": "webpack",
+    "build": "yarn tsc",
     "build-watch": "webpack --watch",
     "test": "jest ./src",
     "test-watch": "jest ./src --watch"

@@ -1,16 +1,12 @@
 {
   "compilerOptions": {
-    "baseUrl": "",
-    "outDir": "./dist/",
-    "sourceMap": false,
-    "noImplicitAny": true,
+    "outDir": "./",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "module": "es6",
-    "target": "ESNext",
-    "allowJs": true,
+    "module": "umd",
+    "target": "es6",
     "moduleResolution": "Node",
     "declaration": true,
   },
-  "files": ["src/index.ts"]
+  "files": ["src/lipid.ts", "src/lipid-react-hook-generator.ts"]
 }
