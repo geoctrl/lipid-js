@@ -7,7 +7,7 @@ describe(`Lipid`, () => {
   let observer: Subscription;
   class AdvancedState extends Lipid {
     readableName() {
-      return this.__state.name
+      return this.get('name')
         .split('_')
         .map((name: string) => name.slice(0, 1).toUpperCase() + name.slice(1))
         .join(' ');
@@ -76,11 +76,11 @@ describe(`Lipid`, () => {
   test(`Should reset to default state`, () => {
     const defaultState = { thing1: 1, thing2: 'two' };
     const state = new Lipid(defaultState);
-    expect(state.__state).toEqual(defaultState);
+    expect(state.get()).toEqual(defaultState);
     state.set({ thing1: 2, thing2: 'three' });
-    expect(state.__state.thing1 === defaultState.thing1).toBeFalsy();
+    expect(state.get('thing1') === defaultState.thing1).toBeFalsy();
     state.set(defaultState, { clear: true });
-    expect(state.__state.thing1 === defaultState.thing1).toBeTruthy();
+    expect(state.get('thing1') === defaultState.thing1).toBeTruthy();
   });
 
   test(`Should call set hooks`, () => {
@@ -98,9 +98,9 @@ describe(`Lipid`, () => {
 
   test(`should clear state`, () => {
     const state = new Lipid({ hello: 'world!' });
-    expect(state.__state).toEqual({ hello: 'world!' });
+    expect(state.get()).toEqual({ hello: 'world!' });
     state.set({}, { clear: true });
-    expect(state.__state).toEqual({});
+    expect(state.get()).toEqual({});
   })
 
 });

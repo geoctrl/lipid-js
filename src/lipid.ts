@@ -2,16 +2,16 @@ import { Subject } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import intersection from 'lodash/intersection';
 import isEqual from 'lodash/isEqual';
+import cloneDeep from 'lodash-es/cloneDeep';
 
-type State = Record<string, any>;
-type StateOpts = { emit?: boolean, clear?: boolean };
-const defaultStateOpts = { emit: true, clear: false };
+export type State = Record<string, any>;
+export type StateOpts = { emit?: boolean, clear?: boolean };
 
 export class Lipid {
-  __defaultState: State;
-  __obs: Subject<State>;
-  __state: State;
-  onSetBefore: (state?: State) => State;
+  private __defaultState: State;
+  private __obs: Subject<State>;
+  private __state: State;
+  onSetBefore: (state?: State, delta?: State) => State;
   onSetAfter: (state?: State, delta?: State) => void;
 
   constructor(state?: State) {
@@ -20,9 +20,9 @@ export class Lipid {
     }
     this.__defaultState = state;
     this.__obs = new Subject();
+    this.__state = state || {};
     this.onSetBefore = state => state;
     this.onSetAfter = () => {}
-    this.__state = state || {};
   }
 
   on(props: string[] = []) {
@@ -43,11 +43,11 @@ export class Lipid {
     );
   }
 
-  get(prop: string = '') {
+  get(prop?: string) {
     return prop ? this.__state[prop] : this.__state;
   }
 
-  set(newState: ((prevState: State) => State) | State, options: StateOpts = defaultStateOpts) {
+  set(newState: ((prevState: State) => State) | State, options: StateOpts = { emit: true, clear: false }) {
     const { clear, emit } = options;
     let delta = typeof newState === 'function'
       ? newState(this.__state)
@@ -55,7 +55,7 @@ export class Lipid {
     if (!(typeof delta === 'object' && delta !== null)) {
       throw new TypeError(`[${this.constructor.name}] "state" argument must be an object`);
     }
-    delta = this.onSetBefore(delta);
+    delta = this.onSetBefore(cloneDeep(this.__state), delta);
     const prevState = Object.assign({}, this.__state);
 
     this.__state = clear
@@ -69,8 +69,12 @@ export class Lipid {
     return this.__state;
   }
 
-  reset(options: { emit?: boolean } = {}) {
-    const { emit } = options;
-    return this.set(this.__defaultState, { emit, clear: true });
+  revertToDefault(options: StateOpts = { emit: true, clear: true }) {
+    return this.set(this.__defaultState, options);
+  }
+
+  setDefault(state: State, options: StateOpts = { emit: true, clear: true }) {
+    this.__defaultState = state;
+    return this.set(this.__defaultState, options);
   }
 }
