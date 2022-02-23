@@ -5,7 +5,7 @@
   "author": "@geoctrl",
   "license": "MIT",
   "repository": "github:geoctrl/lipid",
-  "types": "dist/index.d.ts",
+  "types": "./dist/index.d.ts",
   "scripts": {
     "build": "webpack",
     "build-watch": "webpack --watch",

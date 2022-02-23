@@ -12,6 +12,5 @@
     "moduleResolution": "Node",
     "declaration": true,
   },
-  "include": ["src"],
-  "exclude": ["node_modules", "**/*.test.ts"]
+  "files": ["src/index.ts"]
 }
