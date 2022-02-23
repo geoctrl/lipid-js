@@ -1,47 +1,25 @@
-const path = require('path');
-const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
-const webpack = require('webpack');
+const { resolve } = require('path');
 
-const config = {};
+module.exports = {
+  mode: 'production',
+  entry: resolve(__dirname, 'src/lipid.ts'),
+  output: {
+    path: resolve(__dirname, 'build'),
+    filename: 'index.js',
+    library: {
+      type: 'umd',
+    },
+  },
 
-config.mode = 'development';
-
-config.entry = path.resolve(__dirname, 'dev/index.js');
-config.output = {
-  path: path.resolve(__dirname, 'dev'),
-  filename: 'bundle.js',
+  module: {
+    rules: [
+      {
+        test: /\.ts$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'ts-loader',
+        },
+      },
+    ],
+  },
 };
-
-config.module = {
-  rules: [
-    {
-      test: /\.js$/,
-      exclude: /node_modules/,
-      use: {
-        loader: 'babel-loader',
-        options: {
-          presets: ['@babel/preset-env', '@babel/preset-react'],
-          plugins: [
-            '@babel/plugin-proposal-class-properties',
-            '@babel/plugin-proposal-object-rest-spread',
-            '@babel/plugin-syntax-dynamic-import',
-            'lodash'
-          ],
-        }
-      }
-    }
-  ],
-}
-
-config.plugins = [
-  new LodashModuleReplacementPlugin,
-];
-
-config.devServer = {
-  index: 'index.html',
-  contentBase: path.resolve(__dirname, 'dev'),
-  historyApiFallback: true,
-  port: 8080,
-};
-
-module.exports = config;

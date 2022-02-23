@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "baseUrl": "",
+    "outDir": "./build/",
+    "sourceMap": false,
+    "noImplicitAny": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "module": "es6",
+    "target": "ESNext",
+    "allowJs": true,
+    "moduleResolution": "Node",
+    "declaration": true,
+  },
+  "files": ["src/lipid.ts"]
+}

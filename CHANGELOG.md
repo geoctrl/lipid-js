@@ -1,5 +1,15 @@
 # Simple State Changelog
 
+## v2.0.0
+
+- Module rewritten in typescript.
+
+### BREAKING
+
+- The `.state` property was removed. You can still get your state synchronously
+by using `.get()`.
+- 37kb
+
 ## v0.0.2
 
 - Validation of idea

@@ -1,9 +1,5 @@
+/** @type {import('ts-jest/dist/types').InitialOptionsTsJest} */
 module.exports = {
-  transform: {
-    '^.+\\.jsx?$': 'babel-jest'
-  },
-  transformIgnorePatterns: [
-    'node_modules/(?!(lodash-es))',
-  ],
-  collectCoverage: true,
+  preset: 'ts-jest',
+  testEnvironment: 'jsdom',
 };

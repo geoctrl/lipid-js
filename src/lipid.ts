@@ -1,23 +1,36 @@
 import { Subject } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-import { intersection, isEqual, cloneDeep } from 'lodash';
+import intersection from 'lodash/intersection';
+import isEqual from 'lodash/isEqual';
+
+type State = Record<string, any>;
+type StateOpts = { emit?: boolean, clear?: boolean };
+const defaultStateOpts = { emit: true, clear: false };
 
 export default class Lipid {
-  constructor(state) {
-    this.__defaultState = Object.assign({}, state);
+  __defaultState: State;
+  __obs: Subject<any>;
+  __state: State;
+  onSetBefore: (state?: State) => State;
+  onSetAfter: (state?: State, delta?: State) => void;
+
+  constructor(state?: State) {
+    if (state && typeof state !== 'object') {
+      throw Error('new Lipid() "state" argument must be an object.')
+    }
+    this.__defaultState = state;
     this.__obs = new Subject();
     this.onSetBefore = state => state;
     this.onSetAfter = () => {}
     this.__state = state || {};
-    this.state = cloneDeep(state || {});
   }
 
-  on(props = []) {
+  on(props: string[] = []) {
     return this.__obs.pipe(
       filter(({ state, prevState, delta }) => {
         if (!props || !props.length) return true;
         const keyProps = intersection(props, Object.keys(delta));
-        return keyProps.reduce((final, prop) => {
+        return !!keyProps.reduce((final, prop) => {
           if (!isEqual(state[prop], prevState[prop])) {
             return [...final, prop]
           }
@@ -30,16 +43,14 @@ export default class Lipid {
     );
   }
 
-  get(prop = '') {
-    return prop ? cloneDeep(this.__state[prop]) : cloneDeep(this.__state);
+  get(prop: string = '') {
+    return prop ? this.__state[prop] : this.__state;
   }
 
-  set(newState = {}, options = {}) {
-    const emit = typeof options.emit === 'boolean' ? options.emit : true;
-    const clear = typeof options.clear === 'boolean' ? options.clear : false;
-
+  set(newState: ((prevState: State) => State) | State, options: StateOpts = defaultStateOpts) {
+    const { clear, emit } = options;
     let delta = typeof newState === 'function'
-      ? newState(cloneDeep(this.__state))
+      ? newState(this.__state)
       : newState;
     if (!(typeof delta === 'object' && delta !== null)) {
       throw new TypeError(`[${this.constructor.name}] "state" argument must be an object`);
@@ -51,8 +62,6 @@ export default class Lipid {
       ? Object.assign({}, delta)
       : Object.assign({}, this.__state, delta);
 
-    this.state = cloneDeep(this.__state);
-
     this.onSetAfter(this.__state, delta);
     if (emit) {
       this.__obs.next({ state: this.__state, prevState, delta })
@@ -60,8 +69,8 @@ export default class Lipid {
     return this.__state;
   }
 
-  reset(options) {
-    const { emit, clear } = options;
-    return this.set(this.__defaultState, { emit, clear });
+  reset(options: { emit?: boolean } = {}) {
+    const { emit } = options;
+    return this.set(this.__defaultState, { emit, clear: true });
   }
 }
