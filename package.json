@@ -1,10 +1,11 @@
 {
   "name": "lipid",
-  "version": "2.0.0-beta.0",
-  "main": "lipid.js",
+  "version": "2.0.0-beta.2",
+  "main": "dist/lipid.js",
   "author": "@geoctrl",
   "license": "MIT",
   "repository": "github:geoctrl/lipid",
+  "types": "dist/index.d.ts",
   "scripts": {
     "build": "webpack",
     "build-watch": "webpack --watch",
@@ -18,7 +19,6 @@
     "jest": "^27.5.1",
     "jest-cli": "^27.5.1",
     "jsdom": "^19.0.0",
-    "rxjs": "^7.5.4",
     "ts-jest": "^27.1.3",
     "ts-loader": "^9.2.6",
     "typescript": "^4.5.5",
@@ -26,7 +26,8 @@
     "webpack-cli": "^4.9.2"
   },
   "dependencies": {
-    "lodash-es": "^4.17.21"
+    "lodash-es": "^4.17.21",
+    "rxjs": "^7.5.4"
   },
   "peerDependencies": {
     "react": ">=16",

@@ -1,4 +1,4 @@
-import Lipid from './lipid';
+import { Lipid } from './lipid';
 import { Subscription } from 'rxjs';
 
 describe(`Lipid`, () => {

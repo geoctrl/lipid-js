@@ -1,11 +1,9 @@
-import type Lipid from './lipid';
-import type { useRef, useEffect, useState } from 'react';
-import type { Subscription } from 'rxjs';
+import { Lipid } from './lipid';
+import { useRef, useEffect, useState } from 'react';
+import { Subscription } from 'rxjs';
 
 const useIsMounted = () => {
-  // @ts-ignore
   const isMounted = useRef(false);
-  // @ts-ignore
   useEffect(() => {
     isMounted.current = true;
     return () => {
@@ -18,7 +16,6 @@ const useIsMounted = () => {
 export function lipidReactHookGenerator(lipidState: Lipid) {
   return (properties: string[]) => {
     const isMounted = useIsMounted();
-    // @ts-ignore
     const [state, setState] = useState(
       Object.fromEntries(
         properties.reduce((acc, key) => {
@@ -27,7 +24,6 @@ export function lipidReactHookGenerator(lipidState: Lipid) {
         }, [])
       )
     );
-    // @ts-ignore
     useEffect(() => {
       const obs: Subscription = lipidState
         .on(properties)
