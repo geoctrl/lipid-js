@@ -3,7 +3,7 @@
     "outDir": "./",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "module": "es6",
+    "module": "umd",
     "target": "ESNext",
     "moduleResolution": "Node",
     "declaration": true,
