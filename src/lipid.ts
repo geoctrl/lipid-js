@@ -1,7 +1,7 @@
 import { Subject } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-import intersection from 'lodash/intersection';
-import isEqual from 'lodash/isEqual';
+import intersection from 'lodash-es/intersection';
+import isEqual from 'lodash-es/isEqual';
 import cloneDeep from 'lodash-es/cloneDeep';
 
 export type State = Record<string, any>;
