@@ -1,23 +1,26 @@
 {
   "name": "lipid",
-  "version": "2.0.0-beta.10",
+  "version": "2.0.0-beta.12",
   "main": "./lipid.js",
   "author": "@geoctrl",
   "license": "MIT",
   "repository": "github:geoctrl/lipid",
   "scripts": {
-    "build": "yarn tsc",
+    "build": "rollup --config",
     "build-watch": "webpack --watch",
     "test": "jest ./src",
     "test-watch": "jest ./src --watch"
   },
   "devDependencies": {
+    "@rollup/plugin-node-resolve": "^13.1.3",
+    "@rollup/plugin-typescript": "^8.3.1",
     "@types/jest": "^27.4.0",
     "@types/lodash-es": "^4.17.6",
     "@types/react": "^17.0.39",
     "jest": "^27.5.1",
     "jest-cli": "^27.5.1",
     "jsdom": "^19.0.0",
+    "rollup": "^2.68.0",
     "ts-jest": "^27.1.3",
     "ts-loader": "^9.2.6",
     "typescript": "^4.5.5",
@@ -31,5 +34,10 @@
   "peerDependencies": {
     "react": ">=16",
     "rxjs": ">=6"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    }
   }
 }

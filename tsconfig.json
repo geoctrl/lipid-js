@@ -1,9 +1,9 @@
 {
   "compilerOptions": {
-    "outDir": "./",
+    "outDir": "./build",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "module": "umd",
+    "module": "esnext",
     "target": "ESNext",
     "moduleResolution": "Node",
     "declaration": true,

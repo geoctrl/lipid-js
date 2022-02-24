@@ -1,6 +1,6 @@
 import { Lipid } from './lipid';
 import { useRef, useEffect, useState } from 'react';
-import { Subscription } from 'rxjs';
+import type { Subscription } from 'rxjs';
 
 const useIsMounted = () => {
   const isMounted = useRef(false);
