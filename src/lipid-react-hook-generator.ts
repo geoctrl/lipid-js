@@ -1,4 +1,3 @@
-import { Lipid } from './lipid';
 import { useRef, useEffect, useState } from 'react';
 import type { Subscription } from 'rxjs';
 
@@ -13,7 +12,7 @@ const useIsMounted = () => {
   return isMounted;
 };
 
-export function lipidReactHookGenerator(lipidState: Lipid) {
+export function lipidReactHookGenerator(lipidState) {
   return (properties: string[]) => {
     const isMounted = useIsMounted();
     const [state, setState] = useState(

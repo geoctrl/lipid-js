@@ -22,15 +22,8 @@ export default [
       dir: './',
       format: 'commonjs',
       name: 'lipidReactHookGenerator',
-      globals: {
-        'rxjs': 'rxjs',
-        'lipid': 'lipid',
-        'react': 'react',
-      },
     },
-    plugins: [
-      typescript(),
-      resolve()
-    ]
+    external: ['react'],
+    plugins: [typescript()]
   }
 ];
