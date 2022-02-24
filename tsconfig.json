@@ -5,8 +5,9 @@
     "esModuleInterop": true,
     "module": "esnext",
     "target": "ESNext",
-    "moduleResolution": "Node",
+    "moduleResolution": "node",
     "declaration": true,
+    "allowJs": true
   },
   "files": ["src/lipid.ts", "src/lipid-react-hook-generator.ts"]
 }

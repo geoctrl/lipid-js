@@ -9,11 +9,10 @@ export default [
       format: 'commonjs',
       name: 'lipid',
     },
+    external: ['rxjs', 'rxjs/operators'],
     plugins: [
       typescript(),
-      resolve({
-        resolveOnly: ['rxjs', 'rxjs/operators'],
-      })
+      resolve(),
     ]
   },
   {

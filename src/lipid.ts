@@ -11,8 +11,8 @@ export class Lipid {
   private __defaultState: State;
   private __obs: Subject<State>;
   private __state: State;
-  onSetBefore: (state: State, delta: State) => State;
-  onSetAfter: (state?: State, delta?: State) => void;
+  onSetBefore: undefined | ((state: State, delta: State) => State);
+  onSetAfter: undefined | ((state?: State, delta?: State) => void);
 
   constructor(state?: State) {
     if (state && typeof state !== 'object') {
@@ -21,7 +21,6 @@ export class Lipid {
     this.__defaultState = state;
     this.__obs = new Subject();
     this.__state = state || {};
-    this.onSetBefore = (state, delta) => delta;
     this.onSetAfter = () => {}
   }
 
@@ -55,14 +54,19 @@ export class Lipid {
     if (!(typeof delta === 'object' && delta !== null)) {
       throw new TypeError(`[${this.constructor.name}] "state" argument must be an object`);
     }
-    delta = this.onSetBefore(cloneDeep(this.__state), delta);
+
+    if (this.onSetBefore) {
+      delta = this.onSetBefore(cloneDeep(this.__state), delta);
+    }
     const prevState = Object.assign({}, this.__state);
 
     this.__state = clear
-      ? Object.assign({}, delta)
+      ? delta
       : Object.assign({}, this.__state, delta);
 
-    this.onSetAfter(this.__state, delta);
+    if (this.onSetAfter) {
+      this.onSetAfter(this.__state, delta);
+    }
     if (emit) {
       this.__obs.next({ state: this.__state, prevState, delta })
     }
@@ -73,8 +77,7 @@ export class Lipid {
     return this.set(this.__defaultState, options);
   }
 
-  setDefault(state: State, options: StateOpts = { emit: true, clear: true }) {
+  setDefault(state: State) {
     this.__defaultState = state;
-    return this.set(this.__defaultState, options);
   }
 }
