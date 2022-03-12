@@ -1,9 +1,8 @@
+/** @type {import('ts-jest/dist/types').InitialOptionsTsJest} */
 module.exports = {
-  transform: {
-    '^.+\\.jsx?$': 'babel-jest'
+  preset: 'ts-jest/presets/js-with-ts',
+  testEnvironment: 'node',
+  moduleNameMapper: {
+    '^lodash-es/(.*)$': 'lodash/$1',
   },
-  transformIgnorePatterns: [
-    'node_modules/(?!(lodash-es))',
-  ],
-  collectCoverage: true,
 };

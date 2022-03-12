@@ -1,41 +1,46 @@
 {
   "name": "lipid",
-  "version": "1.0.8",
-  "main": "build/index.js",
+  "version": "2.0.0",
+  "main": "./lipid.js",
   "author": "@geoctrl",
   "license": "MIT",
   "repository": "github:geoctrl/lipid",
-  "sideEffects": false,
   "scripts": {
-    "start": "webpack-dev-server",
-    "build": "webpack --config webpack.config.build.js",
-    "watch": "webpack --watch --config webpack.config.build.js",
+    "build": "rollup --config",
+    "build-watch": "webpack --watch",
     "test": "jest ./src",
     "test-watch": "jest ./src --watch"
   },
   "devDependencies": {
-    "@babel/cli": "^7.8.4",
-    "@babel/core": "^7.8.3",
-    "@babel/plugin-proposal-class-properties": "^7.8.3",
-    "@babel/plugin-proposal-object-rest-spread": "^7.8.3",
-    "@babel/plugin-syntax-decorators": "^7.8.3",
-    "@babel/plugin-syntax-dynamic-import": "^7.8.3",
-    "@babel/preset-env": "^7.8.3",
-    "@babel/preset-react": "^7.8.3",
-    "babel-jest": "^24.9.0",
-    "babel-loader": "^8.0.6",
-    "babel-plugin-lodash": "^3.3.4",
-    "jest": "^24.9.0",
-    "jest-cli": "^24.9.0",
-    "lodash-webpack-plugin": "^0.11.5",
-    "react": "^16.12.0",
-    "react-dom": "^16.12.0",
-    "webpack": "^4.41.5",
-    "webpack-cli": "^3.3.10",
-    "webpack-dev-server": "^3.10.1"
+    "@babel/core": "^7.17.5",
+    "@babel/plugin-transform-modules-commonjs": "^7.16.8",
+    "@rollup/plugin-node-resolve": "^13.1.3",
+    "@rollup/plugin-typescript": "^8.3.1",
+    "@types/jest": "^27.4.0",
+    "@types/lodash-es": "^4.17.6",
+    "@types/react": "^17.0.39",
+    "babel-jest": "^27.5.1",
+    "jest": "^27.5.1",
+    "jest-cli": "^27.5.1",
+    "jsdom": "^19.0.0",
+    "rollup": "^2.68.0",
+    "ts-jest": "^27.1.3",
+    "ts-loader": "^9.2.6",
+    "tslib": "^2.3.1",
+    "typescript": "^4.5.5",
+    "webpack": "^5.69.1",
+    "webpack-cli": "^4.9.2"
   },
   "dependencies": {
-    "lodash": "^4.17.15",
-    "rxjs": "^6.5.4"
+    "lodash-es": "^4.17.21",
+    "rxjs": "^7.5.4"
+  },
+  "peerDependencies": {
+    "react": ">=16"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    }
   }
 }

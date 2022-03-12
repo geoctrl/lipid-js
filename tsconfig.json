@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "outDir": "./",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "target": "ESNext",
+    "moduleResolution": "node",
+    "declaration": true,
+    "allowJs": true
+  },
+  "files": ["src/lipid.ts", "src/lipid-react-hook-generator.ts"]
+}

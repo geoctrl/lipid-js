@@ -1,17 +1,18 @@
-import Lipid from './lipid';
+import { Lipid } from './lipid';
+import { Subscription } from 'rxjs';
 
 describe(`Lipid`, () => {
   const myState = new Lipid();
   const subscriber = jest.fn();
-  let observer;
+  let observer: Subscription;
   class AdvancedState extends Lipid {
     readableName() {
-      return this.state.name
+      return this.get('name')
         .split('_')
-        .map(name => name.slice(0, 1).toUpperCase() + name.slice(1))
+        .map((name: string) => name.slice(0, 1).toUpperCase() + name.slice(1))
         .join(' ');
     }
-    setDoubleAge(age) {
+    setDoubleAge(age: number) {
       this.set({ age: age * 2 });
     }
   }
@@ -27,7 +28,7 @@ describe(`Lipid`, () => {
 
   test(`Should allow previous state to be accessed using a function`, () => {
     myState.set({ age: 9 });
-    myState.set(prevState => ({ age: prevState.age * 2 }));
+    myState.set((prevState) => ({ age: prevState.age * 2 }));
     expect(myState.get().age).toEqual(18);
   });
 
@@ -64,6 +65,7 @@ describe(`Lipid`, () => {
     state.on().subscribe(() => {});
     let error;
     try {
+      // @ts-ignore
       state.set('not an object');
     } catch (e) {
       error = e;
@@ -74,11 +76,11 @@ describe(`Lipid`, () => {
   test(`Should reset to default state`, () => {
     const defaultState = { thing1: 1, thing2: 'two' };
     const state = new Lipid(defaultState);
-    expect(state.state).toEqual(defaultState);
+    expect(state.get()).toEqual(defaultState);
     state.set({ thing1: 2, thing2: 'three' });
-    expect(state.state.thing1 === defaultState.thing1).toBeFalsy();
+    expect(state.get('thing1') === defaultState.thing1).toBeFalsy();
     state.set(defaultState, { clear: true });
-    expect(state.state.thing1 === defaultState.thing1).toBeTruthy();
+    expect(state.get('thing1') === defaultState.thing1).toBeTruthy();
   });
 
   test(`Should call set hooks`, () => {
@@ -96,9 +98,9 @@ describe(`Lipid`, () => {
 
   test(`should clear state`, () => {
     const state = new Lipid({ hello: 'world!' });
-    expect(state.state).toEqual({ hello: 'world!' });
+    expect(state.get()).toEqual({ hello: 'world!' });
     state.set({}, { clear: true });
-    expect(state.state).toEqual({});
+    expect(state.get()).toEqual({});
   })
 
 });

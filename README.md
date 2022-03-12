@@ -1,18 +1,19 @@
 # Lipid
 
-Lipid is simple state management. 
+Simple state management using observables. 
 
 ## Install
+
+```shell
+# yarn
+$ yarn add lipid
+```
 
 ```shell
 # NPM
 $ npm install -S lipid
 ```
 
-```shell
-# yarn
-$ yarn add lipid
-```
 
 ## Setting up your state
 
@@ -20,22 +21,22 @@ $ yarn add lipid
 
 Get started by instantiating the `Lipid` class:
 
-```javascript
-import Lipid from 'lipid';
+```typescript
+import { Lipid } from 'lipid';
   
 const myState = new Lipid();
-console.log(myState.get()); // {}
+console.log(myState.get());
+// => {}
 ```
 
-Each instantiated state is a separate instance of the `Lipid` class, and contains all the methods needed
-to use the state.
+Each instantiated state is a separate instance of the `Lipid` class.
 
 ### Default State
 
 You can add a default state by passing in an object as the first argument:
 
-```javascript
-import Lipid from 'lipid';
+```typescript
+import { Lipid } from 'lipid';
 
 const myState = new Lipid({
   firstName: 'John',
@@ -43,18 +44,16 @@ const myState = new Lipid({
   age: 5,
 });
 
-console.log(myState.get().name); // 'John'
+console.log(myState.get().name);
+// => 'John'
 ```
-
-You can also reset to your default state with the `reset()` method. Continue reading for details.
 
 ### Extend your state
 
-If you need to add complicated logic or ajax calls when you change state, we can extend the `Lipid` class
-with any sort of methods that we want:
+You can extend the `Lipid` class with any sort of methods that you need:
 
-```javascript
-import Lipid from 'lipid';
+```typescript
+import { Lipid } from 'lipid';
 
 class MyState extends Lipid {
   isAdult() {
@@ -66,30 +65,33 @@ class MyState extends Lipid {
 }
 
 const myState = new MyState({ age: 5 });
-console.log(myState.isAdult()); // false
+console.log(myState.isAdult());
+// => false
 ``` 
 
-## Using your state
+## API
 
-### .set(state, [options])
+### `set(state, [options])`
 
-#### `state` (object)
+Set state.
 
-Object to append to state.
+**Args**
 
-#### `options` (object)
+- `state: Record<string, any>` - next state. 
 
-| Property | Description | Type | Default |
-| --- | --- | --- | --- 
-| `emit` | Emit to subscribers | `bool` | `true` |
-| `clear` | Clear state before setting | `bool` | `false` |
+- `options: { emit?: boolean, clear?: boolean }` - options for setting state.
+
+| Property | Description                | Type   | Default |
+|----------|----------------------------|--------|---------|
+| `emit`   | Emit to subscribers        | `bool` | `true`  |
+| `clear`  | Empty state before setting | `bool` | `false` |
 
 Set state within your extending class, or with your instantiated instance:
 
-**inside your extending class:**
+**inside your extended class:**
 
-```javascript
-import Lipid from 'lipid';
+```typescript
+import { Lipid } from 'lipid';
 
 class MyState extends Lipid {
   updateName(name) {
@@ -107,7 +109,7 @@ myState.updateName('John Doe');
 
 **from the instantiated instance:**
 
-```javascript
+```typescript
 import myState from './my-state';
 
 myState.set({
@@ -116,24 +118,46 @@ myState.set({
 });
 ```
 
-### .get(key)
+### `get(key?: string)`
 
-Get the entire state object with no arguments (`.get()`), or pass in a key to get one property (`.get(key)`):
+Get the entire state object with no arguments `get()`, or pass in a key to get
+one property `get(key)`.
 
-```javascript
-import Lipid from 'lipid';
+```typescript
+import { Lipid } from 'lipid';
 
 const myState = new Lipid({ age: 29 });
-myState.get(); // { age: 29 }
-myState.get('age'); // 29
+myState.get(); // => { age: 29 }
+myState.get('age'); // => 29
 ```
 
-### .reset()
+### `on(string[])`
 
-Reset state back to `defaultState` (passed in during instantiation). This method will emit changes to all subscribers.
+Lipid uses observables to emit events across your app. To create an observable you can subscribe to,
+call the `.on()` method.
 
-```javascript
-import Lipid from 'lipid';
+If the `props` argument is empty (`on()` or `on([])`), all props changes will emit to this
+subscriber. You can also pass an array of strings to pick and choose what to listen to:
+
+```typescript
+const myObservable = myState.on(['age']);
+```
+
+And listen for those changes:
+
+```typescript
+myObservable.subscribe(({ state }) => {
+  console.log(state.age);
+  // only emits 'age' changes
+});
+```
+
+### `revertToDefault(options: { emit?: true, clear?: true })`
+
+Revert state back to the default state passed in during instantiation.
+
+```typescript
+import { Lipid } from 'lipid';
 
 const myState = new Lipid({ age: 29 });
 myState.set({ age: 32, show: true });
@@ -141,36 +165,34 @@ myState.reset();
 myState.get(); // { age: 29 }
 ```
 
-### .on([props])
+### `setDefault(State: Record<string, any>)`
 
-Lipid uses observables to emit events across your app. To create an observable you can subscribe to,
-call the `.on()` method.
+Set default state, so everytime you call `revertToDefault()` it will use this
+newly defined state. **Note:** This will not set state - you can follow up by
+firing `revertToDefault()`.
 
-If the `props` argument is empty (`.on()` or `.on([])`), all props changes will emit to this
-subscriber. You can also pass an array of strings to pick and choose what to listen to:
+```typescript
+import { Lipid } from 'lipid';
 
-```javascript
-const myObservable = myState.on(['age']);
-```
-
-Observables use the latest version of rxjs, so feel free to pipe to your heart's content:
-
-```javascript
-myObservable.subscribe(({ state }) => {
-  console.log(state.age);
-  // only emits 'age' changes
-});
+const myState = new Lipid({ age: 29 });
+myState.set({ age: 32, show: true });
+myState.setDefault({ age: 35, show: false });
+myState.get(); // { age: 29 }
 ```
 
 ## Internal state hooks
 
-### .onSetBefore(state) => state 
+### `onSetBefore((currentState: Record<string, any>) => Record<string, any>` 
 
 Manipulate state before `set` is called. Requires state to be returned.
 
-```javascript
+#### Args
+
+- `function(currentState, delta) => newState` - function that returns new state.
+
+```typescript
 class MyState extends Lipid {
-  onSetBefore(state) {
+  onSetBefore = (state) => {
     return {
       ...state,
       lastUpdated: new Date(),
@@ -179,19 +201,20 @@ class MyState extends Lipid {
 }
 const myState = new MyState();
 myState.set({ age: 29 });
-state.get(); // { age: 29, lastUpdated: 1571291829316 }
+state.get();
+// => { age: 29, lastUpdated: 1571291829316 }
 ```
 
-### .onSetAfter(newState, delta) 
+### `onSetAfter(newState: Record<string, any>, delta: Record<string, any>)` 
 
-Do side-effect things after `set` is called.
+Do side effect things after `set` is called.
 
 **Args**
 
-- `newState` - new state
-- `delta` - new state passed in to `.set()`. This helps us perform specific operations based on the delta properties.
+- `state` - all of state.
+- `delta` - only the properties that were just changed.
 
-```javascript
+```typescript
 class MyState extends Lipid {
   onSetAfter(state) {
     updateStorage('myState', state).then(() => {});
@@ -202,46 +225,28 @@ class MyState extends Lipid {
 **Warning:** calling `this.set()` within a hook will result in an infinite loop and will crash your app 😨. Don't do that.
 
 
-## Practical React Example
+## `lipidReactHookGenerator(LipidState)`
 
-**my-state.js**
+This method will generate react hooks based off of changes made to your state.
 
-```javascript
-import Lipid from 'lipid';
+```typescript jsx
+import { Lipid, lipidReactHookGenerator } from 'lipid';
 
-class MyState extends Lipid {
-  isAdult() {
-    return this.state.age >= 18;
-  }
-}
-
-export default new MyState();
+const myState = new Lipid({ message: 'Hello, world!' });
+const useMyState = lipidReactHookGenerator(myState);
 ```
 
-**app.js**
+The generated hooks accept one argument: `string[]` - an array of property
+"keys" to watch for changes:
 
-```javascript
-import React, { useState, useEffect } from 'react';
-import myState from './my-state';
+```typescript jsx
+import { useMyState } from './my-state';
 
-export function DisplayAge() {
-  const [age, updateAge] = useState(myState.state.age);
-  const [isAdult, updateIsAdult] = useState(myState.isAdult());
-  
-  useEffect(() => {
-    const ageObserver = myState.subscribe(({ age }) => {
-      updateAge(age);
-      updateIsAdult(myState.isAdult());
-    }, ['age'], (err) => {
-      console.error(err);
-    });
-    return ageObserver.unsubscribe;
-  }, []);  
-  
+function myComponent() {
+  const { message } = useMyState(['message']);
   return (
     <div>
-      <div>Age: {age}</div>
-      <div>Is adult: {isAdult.toString()}</div>
+      {message}
     </div>
   );
 }

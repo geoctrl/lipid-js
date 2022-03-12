@@ -1,1 +1,10 @@
-dev
+.idea
+coverage
+src
+.babelrc
+.browserslistrc
+jest.config.js
+tsconfig.json
+webpack.config.js
+yarn.lock
+yarn-error.log
